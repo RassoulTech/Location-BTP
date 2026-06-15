@@ -489,11 +489,6 @@ html[data-theme="light"] .icon-moon { fill: var(--gold); stroke: none; }
 .card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.7rem; }
 .card-cat { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
 
-.badge { display: inline-flex; align-items: center; gap: 0.45rem; font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
-.badge::before { content: ""; width: 7px; height: 7px; border-radius: 50%; }
-.badge-dispo::before { background: var(--ok); box-shadow: 0 0 10px var(--ok); }
-.badge-limite::before { background: var(--gold-2); box-shadow: 0 0 10px var(--gold-2); }
-.badge-demande::before { background: var(--err); box-shadow: 0 0 10px var(--err); }
 
 .card h3 { font-size: 1.5rem; }
 .card-spec { font-family: var(--mono); font-size: 0.71rem; color: var(--muted); margin: 0.4rem 0 1.3rem; }
@@ -1239,10 +1234,6 @@ html[data-theme="light"] .field.has-ok input { border-color: rgba(21, 128, 61, 0
   color: var(--muted);
   margin-top: 0.25rem;
 }
-.equip-preview .p-stock { margin-top: 0.45rem; }
-.p-stock .in-stock, .p-stock .out-stock { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; }
-.p-stock .in-stock { color: var(--ok); }
-.p-stock .out-stock { color: var(--err); }
 
 /* ---------- Bascule du wizard ---------- */
 .wizard-mode {
