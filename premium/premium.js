@@ -176,7 +176,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   /* ════════════════ Slider du hero (accueil) ════════════════ */
   const slider = $("#heroSlider");
   if (slider) {
-    const picks = ["telescopique", "chariot-diesel", "nacelle-artic"]
+    const picks = ["grue-mobile", "pelle-hydraulique", "manitou-telescopique"]
       .map(id => EQUIPMENTS.find(e => e.id === id));
     slider.innerHTML = `
       ${picks.map((e, i) => `
@@ -260,7 +260,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const featured = $("#featuredGrid");
   if (featured) {
-    featured.innerHTML = ["chariot-elec", "gerbeur", "nacelle-ciseaux"]
+    featured.innerHTML = ["grue-mobile", "manitou-telescopique", "chargeuse"]
       .map((id, i) => cardHTML(EQUIPMENTS.find(e => e.id === id), i)).join("");
     bindCards(featured);
   }
