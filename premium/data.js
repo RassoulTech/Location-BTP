@@ -173,21 +173,17 @@ const ART = {
   },
 };
 
-// ---------- Parc levage & manutention — location FCFA/jour · achat FCFA ----------
+// ---------- Parc levage & manutention — listes officielles (6 matériels) ----------
 const EQUIPMENTS = [
-  { id: "chariot-diesel",  name: "Chariot élévateur diesel 3,5 T",   cat: "Chariots",      price: 65000,  sale: 22000000, caution: 1500000, sectors: ["BTP", "Industrie", "Logistique"], spec: "Levée 4,5 m · Fourches 1 200 mm · Pneus tout-terrain", art: "forklift",       img: "img/chariot-diesel.jpg",   stock: 6 },
-  { id: "chariot-elec",    name: "Chariot élévateur électrique 2 T", cat: "Chariots",      price: 55000,  sale: 19500000, caution: 1200000, sectors: ["Industrie", "Logistique"],        spec: "Levée 4,7 m · 48 V · Intérieur / extérieur",           art: "forkliftE",      img: "img/chariot-elec.jpg",     stock: 4 },
-  { id: "telescopique",    name: "Chariot télescopique 14 m",        cat: "Chariots",      price: 120000, sale: 58000000, caution: 2500000, sectors: ["BTP", "Industrie"],               spec: "Capacité 4 T · Déport 9,5 m · 4×4",                    art: "telehandler",    img: "img/telescopique.jpg",     stock: 2 },
-  { id: "transpal-manuel", name: "Transpalette manuel 2,5 T",        cat: "Transpalettes", price: 8000,   sale: 350000,   caution: 100000,  sectors: ["Logistique", "Industrie"],        spec: "Fourches 1 150 mm · Roues nylon · Levée 200 mm",       art: "palletManual",   img: "img/transpal-manuel.jpg",  stock: 14 },
-  { id: "transpal-elec",   name: "Transpalette électrique 2 T",      cat: "Transpalettes", price: 25000,  sale: 4500000,  caution: 500000,  sectors: ["Logistique", "Industrie"],        spec: "Autonomie 8 h · Timon ergonomique · Lithium",          art: "palletElectric", img: "img/transpal-elec.jpg",    stock: 8 },
-  { id: "gerbeur",         name: "Gerbeur électrique 1,6 T",         cat: "Gerbeurs",      price: 35000,  sale: 7500000,  caution: 750000,  sectors: ["Logistique", "Industrie"],        spec: "Levée 3,6 m · Mât duplex · 24 V",                      art: "stacker",        img: "img/gerbeur.jpg",          stock: 5 },
-  { id: "preparateur",     name: "Préparateur de commandes 5 m",     cat: "Gerbeurs",      price: 45000,  sale: 12000000, caution: 1000000, sectors: ["Logistique"],                     spec: "Picking 5 m · Cabine élevable · Allées étroites",      art: "orderPicker",    img: "img/preparateur.jpg",      stock: 3 },
-  { id: "nacelle-ciseaux", name: "Nacelle ciseaux 10 m",             cat: "Nacelles",      price: 60000,  sale: 14000000, caution: 800000,  sectors: ["BTP", "Industrie"],               spec: "Hauteur trav. 10 m · Charge 320 kg · Électrique",      art: "scissor",        img: "img/nacelle-ciseaux.jpg",  stock: 7 },
-  { id: "nacelle-artic",   name: "Nacelle articulée 16 m",           cat: "Nacelles",      price: 100000, sale: 38000000, caution: 1500000, sectors: ["BTP", "Industrie"],               spec: "Hauteur trav. 16 m · Déport 9 m · Diesel 4×4",         art: "boom",           img: "img/nacelle-artic.jpg",    stock: 4 },
-  { id: "grue-atelier",    name: "Grue d'atelier 2 T",               cat: "Levage",        price: 20000,  sale: 1200000,  caution: 300000,  sectors: ["Industrie", "BTP"],               spec: "Flèche réglable · Pliable · Sur roulettes",            art: "shopCrane",      img: null,                       stock: 9 },
-  { id: "table-elevatrice",name: "Table élévatrice 800 kg",          cat: "Levage",        price: 15000,  sale: 900000,   caution: 250000,  sectors: ["Industrie", "Logistique"],        spec: "Plateau 1 200 × 800 · Levée 1,5 m · Mobile",           art: "liftTable",      img: "img/table-elevatrice.jpg", stock: 11 },
-  { id: "palan-portique",  name: "Palan électrique 1 T + portique",  cat: "Levage",        price: 30000,  sale: 2200000,  caution: 600000,  sectors: ["Industrie", "BTP"],               spec: "Hauteur 4 m · Chaîne 6 m · 230 V",                     art: "gantry",         img: "img/palan-portique.jpg",   stock: 0 },
+  { id: "grue-mobile", name: "Grue mobile", cat: "Grues", price: 220000, sale: 98000000, caution: 2500000, sectors: ["BTP","Levage"], spec: "Grue mobile polyvalente pour levage sur chantier", img: "https://source.unsplash.com/1200x800/?mobile%20crane", stock: 3 },
+  { id: "pelle-hydraulique", name: "Pelle hydraulique", cat: "Pelles", price: 180000, sale: 72000000, caution: 1800000, sectors: ["BTP","Terrassement"], spec: "Pelle hydraulique sur chenilles pour excavation", img: "https://source.unsplash.com/1200x800/?excavator", stock: 3 },
+  { id: "manitou-telescopique", name: "Manitou télescopique", cat: "Manitou", price: 140000, sale: 48000000, caution: 1500000, sectors: ["BTP","Logistique"], spec: "Chariot télescopique Manitou pour manutention et élevage", img: "https://source.unsplash.com/1200x800/?telehandler,manitou", stock: 3 },
+  { id: "chargeuse", name: "Chargeuse sur pneus", cat: "Chargeuses", price: 160000, sale: 64000000, caution: 1800000, sectors: ["BTP","Terrassement"], spec: "Chargeuse sur pneus pour chargement et déplacement de matériaux", img: "https://source.unsplash.com/1200x800/?wheel%20loader", stock: 3 },
+  { id: "tractopelle", name: "Tractopelle", cat: "Tractopelles", price: 150000, sale: 58000000, caution: 1700000, sectors: ["BTP","Travaux"], spec: "Tractopelle polyvalent pour terrassement et rétro", img: "https://source.unsplash.com/1200x800/?backhoe,loader", stock: 3 },
+  { id: "bulldozer", name: "Bulldozer", cat: "Bulldozers", price: 240000, sale: 120000000, caution: 3000000, sectors: ["BTP","Terrassement"], spec: "Bulldozer pour terrassement, nivellement et poussée de matériaux", img: "https://source.unsplash.com/1200x800/?bulldozer", stock: 3 },
 ];
+
+const CATEGORIES = ["Tout", ...new Set(EQUIPMENTS.map(e => e.cat))];
 
 const CATEGORIES = ["Tout", ...new Set(EQUIPMENTS.map(e => e.cat))];
 const SECTORS = ["BTP", "Industrie", "Logistique"];

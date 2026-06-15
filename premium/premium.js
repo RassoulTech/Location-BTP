@@ -667,7 +667,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       box.hidden = false;
       box.innerHTML = `
         <div class="p-art">${e.img
-          ? `<img src="${e.img}" alt="${e.name}" onerror="__artFallback(this,'${e.art}','${e.id}-pvfb')">`
+          ? `<img src="${e.img}" alt="${e.name}" loading="lazy" onerror="__artFallback(this,'shopCrane','${e.id}-pvfb')">`
           : ART[e.art](e.id + "-pv")}</div>
         <div><div class="p-name">${e.name}</div>        <div class="p-spec">${e.spec}</div></div>
         <div class="p-price">${money(wMode === "vente" ? e.sale : e.price)}<small>${wMode === "vente" ? "HT — à l'achat" : "HT / jour"}</small></div>`;

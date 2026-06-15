@@ -22,18 +22,12 @@ fs.mkdirSync(DATA_DIR, { recursive: true });
 
 /* ---------- Référentiel tarifaire (source de vérité serveur) ---------- */
 const CATALOG = {
-  "chariot-diesel":   { name: "Chariot élévateur diesel 3,5 T",   price: 65000,  sale: 22000000, caution: 1500000, stock: 6 },
-  "chariot-elec":     { name: "Chariot élévateur électrique 2 T", price: 55000,  sale: 19500000, caution: 1200000, stock: 4 },
-  "telescopique":     { name: "Chariot télescopique 14 m",        price: 120000, sale: 58000000, caution: 2500000, stock: 2 },
-  "transpal-manuel":  { name: "Transpalette manuel 2,5 T",        price: 8000,   sale: 350000,   caution: 100000,  stock: 14 },
-  "transpal-elec":    { name: "Transpalette électrique 2 T",      price: 25000,  sale: 4500000,  caution: 500000,  stock: 8 },
-  "gerbeur":          { name: "Gerbeur électrique 1,6 T",         price: 35000,  sale: 7500000,  caution: 750000,  stock: 5 },
-  "preparateur":      { name: "Préparateur de commandes 5 m",     price: 45000,  sale: 12000000, caution: 1000000, stock: 3 },
-  "nacelle-ciseaux":  { name: "Nacelle ciseaux 10 m",             price: 60000,  sale: 14000000, caution: 800000,  stock: 7 },
-  "nacelle-artic":    { name: "Nacelle articulée 16 m",           price: 100000, sale: 38000000, caution: 1500000, stock: 4 },
-  "grue-atelier":     { name: "Grue d'atelier 2 T",               price: 20000,  sale: 1200000,  caution: 300000,  stock: 9 },
-  "table-elevatrice": { name: "Table élévatrice 800 kg",          price: 15000,  sale: 900000,   caution: 250000,  stock: 11 },
-  "palan-portique":   { name: "Palan électrique 1 T + portique",  price: 30000,  sale: 2200000,  caution: 600000,  stock: 0 },
+  "grue-mobile":       { name: "Grue mobile",           price: 220000, sale: 98000000,  caution: 2500000, stock: 3 },
+  "pelle-hydraulique": { name: "Pelle hydraulique",     price: 180000, sale: 72000000,  caution: 1800000, stock: 3 },
+  "manitou-telescopique": { name: "Manitou télescopique", price: 140000, sale: 48000000,  caution: 1500000, stock: 3 },
+  "chargeuse":         { name: "Chargeuse sur pneus",   price: 160000, sale: 64000000,  caution: 1800000, stock: 3 },
+  "tractopelle":       { name: "Tractopelle",          price: 150000, sale: 58000000,  caution: 1700000, stock: 3 },
+  "bulldozer":         { name: "Bulldozer",            price: 240000, sale: 120000000, caution: 3000000, stock: 3 },
 };
 const DELIVERY_COST = 40000;
 const TVA_RATE = 0.18;
