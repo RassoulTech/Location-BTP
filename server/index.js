@@ -182,14 +182,11 @@ app.post("/api/bookings", rateLimit, async (req, res) => {
     const quote = computeQuote(booking);
     if (quote.error) return res.status(400).json({ ok: false, error: quote.error });
 
-    // Contrôle de la disponibilité (parc − ventes − locations en cours)
+    // Vérification de la disponibilité désactivée : ne pas bloquer la création de réservation
+    // La quantité validée côté serveur est conservée, mais une éventuelle pénurie n'empêche plus l'enregistrement.
     booking.qty = quote.qty;
-    const avail = availabilityOf(booking.equip);
-    if (avail < quote.qty) {
-      return res.status(409).json({ ok: false, error: avail > 0
-        ? `Stock insuffisant — il reste ${avail} unité${avail > 1 ? "s" : ""} en stock.`
-        : "Matériel actuellement épuisé — contactez-nous pour les délais." });
-    }
+    // Note : la disponibilité dynamique est toujours accessible via GET /api/stock pour information, mais
+    // elle n'est plus bloquante lors de la création d'une réservation (finalisation via WhatsApp). 
 
     const isSale = quote.mode === "vente";
     booking.ref = (isSale ? "TRL-V-" : "TRL-L-") + new Date().getFullYear() + "-" +
