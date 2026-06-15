@@ -218,7 +218,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   /* ════════════════ Cartes machines ════════════════ */
   function cardHTML(e, i = 0, mode = "location") {
     const sale = mode === "vente";
-    const sb = stockBadge(stockOf(e));
     const main = sale
       ? `<div class="price">${money(e.sale)}<small>HT — à l'achat</small></div>`
       : `<div class="price">${money(e.price)}<small>HT / jour</small></div>`;
@@ -237,7 +236,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         : ART[e.art](e.id)}</div>
       <div class="card-top">
         <span class="card-cat">${e.cat}</span>
-        <span class="badge ${sb.cls}">${sb.label}</span>
       </div>
       <h3>${e.name}</h3>
       <p class="card-spec">${e.spec}</p>
@@ -270,7 +268,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   /* ════════════════ Catalogue : filtres premium + bascule location/vente ════════════════ */
   const grid = $("#catalogGrid");
   if (grid) {
-    const state = { mode: "location", cats: new Set(), sectors: new Set(), dispos: new Set(), q: "", min: 0, max: Infinity, sort: "featured" };
+    const state = { mode: "location", cats: new Set(), sectors: new Set(), q: "", min: 0, max: Infinity, sort: "featured" };
     const priceOf = e => state.mode === "vente" ? e.sale : e.price;
     const modeMax = () => Math.max(...EQUIPMENTS.map(priceOf));
 
@@ -332,22 +330,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
 
-    // — Puces disponibilité (dérivées du stock réel, multi-sélection)
-    const dispoBox = $("#dispoChips");
-    Object.entries(STOCK_BUCKETS).forEach(([key, d]) => {
-      dispoBox.insertAdjacentHTML("beforeend", `
-        <button type="button" class="chip" data-dispo="${key}" aria-pressed="false">
-          <span class="chip-dot" style="background:${d.color}"></span>${d.label}
-        </button>`);
-    });
-    dispoBox.addEventListener("click", e => {
-      const chip = e.target.closest(".chip");
-      if (!chip) return;
-      const k = chip.dataset.dispo;
-      state.dispos.has(k) ? state.dispos.delete(k) : state.dispos.add(k);
-      chip.setAttribute("aria-pressed", state.dispos.has(k));
-      render();
-    });
+    // Disponibilité: badges removed (no admin page to manage stock) — UI does not show availability filters.
 
     // — Double curseur de prix (bornes selon le mode actif)
     const rMin = $("#rangeMin"), rMax = $("#rangeMax"), rFill = $("#rangeFill"), rLabel = $("#rangeLabel");
@@ -681,17 +664,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       const e = getEquip();
       const box = $("#equipPreview");
       if (!e) { box.hidden = true; return; }
-      const n = stockOf(e);
-      const stockHtml = n > 0
-        ? `<span class="in-stock">${n} en stock</span>`
-        : `<span class="out-stock">Épuisé — nous contacter</span>`;
       box.hidden = false;
       box.innerHTML = `
         <div class="p-art">${e.img
           ? `<img src="${e.img}" alt="${e.name}" onerror="__artFallback(this,'${e.art}','${e.id}-pvfb')">`
           : ART[e.art](e.id + "-pv")}</div>
-        <div><div class="p-name">${e.name}</div><div class="p-spec">${e.spec}</div>
-          <div class="p-stock">${stockHtml}</div></div>
+        <div><div class="p-name">${e.name}</div>        <div class="p-spec">${e.spec}</div></div>
         <div class="p-price">${money(wMode === "vente" ? e.sale : e.price)}<small>${wMode === "vente" ? "HT — à l'achat" : "HT / jour"}</small></div>`;
       setError("wEquip", false);
       wQty.dispatchEvent(new Event("change")); // recadre la quantité selon le stock
