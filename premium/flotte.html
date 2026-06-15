@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Flotte — Location &amp; vente — NDIOBEEN GUI LOGISTIQUE</title>
+<meta name="description" content="Chariots élévateurs, transpalettes, gerbeurs, nacelles, levage : toute la flotte NDIOBEEN GUI LOGISTIQUE, en location au jour ou à l'achat. BTP, industrie, logistique.">
+<script>document.documentElement.dataset.theme = localStorage.getItem("ndiobeen-theme") || "dark";</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Montserrat:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="premium.css">
+</head>
+<body>
+
+<main>
+
+  <header class="page-hero">
+    <p class="overline reveal">La Flotte — Location &amp; vente</p>
+    <h1 class="reveal d1">Des machines <em>choisies une à une.</em></h1>
+    <p class="section-lede reveal d2">
+      En location au jour ou à l'achat, en FCFA HT, hors transport. Chaque engin est contrôlé
+      sur 52 points avant de quitter nos ateliers de Dakar. Basculez entre
+      <strong>Location</strong> et <strong>Vente</strong>, puis cliquez une machine.
+    </p>
+  </header>
+
+  <section class="section">
+    <div class="toolbar reveal" aria-label="Filtres du catalogue">
+      <div class="toolbar-row mode-row">
+        <div class="mode-switch" id="modeSwitch" role="group" aria-label="Mode location ou vente">
+          <button type="button" class="mode-opt is-active" data-mode="location" aria-pressed="true">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3v3M17 3v3M5 6h14a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1zM4 10h16"/></svg>
+            Location
+          </button>
+          <button type="button" class="mode-opt" data-mode="vente" aria-pressed="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h2l2.4 11.5a1 1 0 0 0 1 .8h8.5a1 1 0 0 0 1-.78L21 8H6.2"/><circle cx="9.5" cy="20" r="1.4"/><circle cx="17.5" cy="20" r="1.4"/></svg>
+            Vente
+          </button>
+        </div>
+        <p class="mode-caption" id="modeCaption">Tarifs de location en FCFA HT par jour.</p>
+      </div>
+
+      <div class="toolbar-row">
+        <label class="search-wrap grow">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg>
+          <input type="search" id="searchInput" placeholder="Rechercher une machine, une capacité, un secteur…" aria-label="Recherche instantanée">
+          <button type="button" class="search-clear" id="searchClear" hidden aria-label="Effacer la recherche">
+            <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>
+          </button>
+        </label>
+        <div id="sortSelect"></div>
+        <button type="button" class="reset-btn" id="resetFilters" hidden>
+          <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 1 2.6 6.4M3 12V7m0 5h5"/></svg>
+          Réinitialiser
+        </button>
+      </div>
+
+      <div class="toolbar-row chip-row">
+        <span class="filter-label">Catégorie</span>
+        <div class="chip-group" id="catChips" role="group" aria-label="Catégories — sélection multiple"></div>
+      </div>
+
+      <div class="toolbar-row chip-row">
+        <span class="filter-label">Secteur</span>
+        <div class="chip-group" id="sectorChips" role="group" aria-label="Secteurs — sélection multiple"></div>
+      </div>
+
+      <div class="toolbar-row">
+        <div id="dispoChips" role="group" aria-label="Disponibilité — sélection multiple" style="display:flex;flex-wrap:wrap;gap:.9rem"></div>
+        <div class="range-wrap" aria-label="Fourchette de prix">
+          <div class="range-labels"><span id="rangeUnitLabel">Prix / jour</span><span id="rangeLabel"></span></div>
+          <div class="range-track">
+            <div class="range-fill" id="rangeFill"></div>
+            <input type="range" class="range-input" id="rangeMin" min="0" step="5000" value="0" aria-label="Prix minimum">
+            <input type="range" class="range-input" id="rangeMax" min="0" step="5000" aria-label="Prix maximum">
+          </div>
+        </div>
+      </div>
+      <p class="results-note" id="resultsNote" role="status"></p>
+    </div>
+    <div class="fleet-grid" id="catalogGrid"></div>
+    <p class="empty" id="catalogEmpty" hidden>Aucune machine ne correspond à votre recherche.</p>
+  </section>
+
+  <section class="section">
+    <div class="cta-band reveal">
+      <h2>Besoin d'un conseil pour dimensionner&nbsp;?</h2>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap">
+        <a class="btn btn-dark" href="services.html">Découvrir nos services</a>
+        <a class="btn btn-dark" href="contact.html">Demander l'audit offert</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="data.js"></script>
+<script src="ui.js"></script>
+<script src="premium.js"></script>
+</body>
+</html>

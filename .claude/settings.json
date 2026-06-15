@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e ' *)",
+      "Bash(node --check premium/ui.js)",
+      "Bash(node --check server/index.js)"
+    ]
+  }
+}

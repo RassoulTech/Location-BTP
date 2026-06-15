@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact &amp; conciergerie — NDIOBEEN GUI LOGISTIQUE</title>
+<meta name="description" content="Contactez NDIOBEEN GUI LOGISTIQUE : devis de location ou d'achat, longue durée, audit de flux, SAV. Réponse sous 2 heures ouvrées.">
+<script>document.documentElement.dataset.theme = localStorage.getItem("ndiobeen-theme") || "dark";</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Montserrat:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="premium.css">
+</head>
+<body>
+
+<main>
+  <header class="page-hero">
+    <p class="overline reveal">Conciergerie &amp; conseil</p>
+    <h1 class="reveal d1">Parlons de <em>votre projet.</em></h1>
+    <p class="section-lede reveal d2">
+      Location ponctuelle, achat, longue durée, flotte complète ou audit de flux&nbsp;?
+      Nos experts BTP, industrie et logistique vous répondent sous 2&nbsp;heures ouvrées.
+    </p>
+  </header>
+
+  <section class="section">
+    <div class="contact-grid">
+      <div class="contact-info reveal">
+        <div class="info-block">
+          <h4>Maison mère</h4>
+          <p>Zone industrielle SODIDA<br>Avenue Bourguiba<br>Dakar, Sénégal</p>
+        </div>
+        <div class="info-block">
+          <h4>Horaires</h4>
+          <p>Lun – Ven : 7 h 30 – 18 h 30<br>Samedi : 8 h – 13 h<br><span class="tag-gold">Conciergerie 24 / 7 pour nos clients</span></p>
+        </div>
+        <div class="info-block">
+          <h4>Ligne directe</h4>
+          <p><a href="https://wa.me/221782953780" target="_blank" rel="noopener">+221 78 295 37 80</a><br>
+          Location&nbsp;: <a href="https://wa.me/221782953780" target="_blank" rel="noopener">Finaliser via WhatsApp</a><br>
+          Achat&nbsp;: <a href="https://wa.me/221782953780" target="_blank" rel="noopener">Finaliser via WhatsApp</a></p>
+        </div>
+      </div>
+      <form class="contact-form reveal d1" id="contactForm" novalidate>
+        <div class="field">
+          <label for="cName">Nom *</label>
+          <input type="text" id="cName" required>
+          <p class="error" data-error="cName">Indiquez votre nom.</p>
+        </div>
+        <div class="field">
+          <label for="cEmail">E-mail *</label>
+          <input type="email" id="cEmail" autocomplete="email" autocapitalize="none" spellcheck="false"
+                 placeholder="nom@domaine.sn" required>
+          <p class="error" data-error="cEmail">Adresse e-mail invalide.</p>
+        </div>
+        <div class="field">
+          <label for="cPhone">Téléphone <span style="opacity:.55">(optionnel)</span></label>
+          <div class="phone-row">
+            <div class="select-dial" id="cDial"></div>
+            <input type="tel" id="cPhone" autocomplete="tel-national" inputmode="tel">
+          </div>
+        </div>
+        <div class="field">
+          <label for="cMsg">Message *</label>
+          <textarea id="cMsg" rows="5" required placeholder="Décrivez votre besoin : location ou achat, matériel, dates, site à équiper…"></textarea>
+          <p class="error" data-error="cMsg">Écrivez votre message.</p>
+        </div>
+        <input type="text" id="cWebsite" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="submit" class="btn btn-gold">Envoyer le message</button>
+        <p class="form-ok" id="contactOk" hidden></p>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<script src="data.js"></script>
+<script src="ui.js"></script>
+<script src="premium.js"></script>
+</body>
+</html>

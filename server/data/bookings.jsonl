@@ -1,0 +1,4 @@
+{"mode":"location","equip":"chariot-diesel","qty":2,"start":"2026-06-13","end":"2026-06-20","name":"Location en cours"}
+{"mode":"location","equip":"chariot-elec","qty":1,"start":"2026-05-01","end":"2026-05-10","name":"Location terminee (retour auto)"}
+{"mode":"vente","equip":"gerbeur","qty":1,"start":"","end":"","name":"Vente definitive"}
+{"mode":"location","equip":"chariot-diesel","qty":2,"start":"2026-07-01","end":"2026-07-10","delivery":"retrait","clientType":"pro","name":"Awa Diallo","company":"","email":"awa@example.com","phone":"+221 77 123 45 67","address":"","city":"","ref":"TRL-L-2026-6789","createdAt":"2026-06-12T19:54:51.716Z","totalTTC":1380600}

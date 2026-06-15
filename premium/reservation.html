@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Réservation &amp; devis d'achat — NDIOBEEN GUI LOGISTIQUE</title>
+<meta name="description" content="Location ou achat de matériel de levage en 4 étapes : matériel, dates, coordonnées, confirmation. Devis instantané, sans paiement en ligne.">
+<script>document.documentElement.dataset.theme = localStorage.getItem("ndiobeen-theme") || "dark";</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Montserrat:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="premium.css">
+</head>
+<body>
+
+<main>
+
+  <header class="page-hero">
+    <p class="overline reveal">Réservation &amp; achat</p>
+    <h1 class="reveal d1">Quatre étapes, <em>trois minutes.</em></h1>
+    <p class="section-lede reveal d2">
+      Location ou achat&nbsp;: devis instantané, sans paiement en ligne. En location, vous réglez
+      à la remise du matériel&nbsp;; à l'achat, un devis ferme vous parvient sous 24&nbsp;heures.
+    </p>
+  </header>
+
+  <section class="section">
+    <p class="wizard-note reveal">
+      Location ou achat&nbsp;? Basculez à tout moment ci-dessous. Première visite&nbsp;?
+      Découvrez d'abord <a href="services.html">nos services et le déroulé</a>.
+    </p>
+
+    <div class="wizard reveal" id="wizard">
+      <div class="wizard-mode">
+        <div class="mode-switch" id="wModeSwitch" role="group" aria-label="Location ou achat">
+          <button type="button" class="mode-opt is-active" data-mode="location" aria-pressed="true">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3v3M17 3v3M5 6h14a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1zM4 10h16"/></svg>
+            Location
+          </button>
+          <button type="button" class="mode-opt" data-mode="vente" aria-pressed="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h2l2.4 11.5a1 1 0 0 0 1 .8h8.5a1 1 0 0 0 1-.78L21 8H6.2"/><circle cx="9.5" cy="20" r="1.4"/><circle cx="17.5" cy="20" r="1.4"/></svg>
+            Achat
+          </button>
+        </div>
+        <p class="wizard-mode-note">Le devis et les étapes s'adaptent automatiquement à votre choix.</p>
+      </div>
+      <ol class="steps" id="stepsBar">
+        <li class="step is-active" data-step="1"><b>I</b><span>Matériel</span></li>
+        <li class="step" data-step="2"><b>II</b><span>Dates</span></li>
+        <li class="step" data-step="3"><b>III</b><span>Coordonnées</span></li>
+        <li class="step" data-step="4"><b>IV</b><span>Confirmation</span></li>
+      </ol>
+
+      <!-- Étape 1 -->
+      <form class="panel is-active" data-panel="1" novalidate>
+        <h3>Choisissez votre matériel</h3>
+        <div class="field">
+          <label for="wEquipInput">Machine</label>
+          <div class="combobox" id="equipCombo">
+            <input type="text" id="wEquipInput" placeholder="Rechercher une machine…" autocomplete="off"
+                   role="combobox" aria-expanded="false" aria-controls="equipList" aria-autocomplete="list" spellcheck="false">
+            <svg class="cb-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            <div class="select-menu" id="equipList" role="listbox" aria-label="Machines disponibles"></div>
+          </div>
+          <input type="hidden" id="wEquip">
+          <p class="error" data-error="wEquip">Sélectionnez une machine dans la liste.</p>
+        </div>
+        <div class="field field-s">
+          <label for="wQty">Quantité</label>
+          <div class="stepper">
+            <button type="button" data-step="-1" aria-label="Diminuer la quantité"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
+            <input type="number" id="wQty" min="1" max="10" value="1" inputmode="numeric" aria-label="Quantité">
+            <button type="button" data-step="1" aria-label="Augmenter la quantité"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+          </div>
+        </div>
+        <div class="equip-preview" id="equipPreview" hidden></div>
+        <div class="panel-actions">
+          <span></span>
+          <button type="submit" class="btn btn-gold">Continuer</button>
+        </div>
+      </form>
+
+      <!-- Étape 2 -->
+      <form class="panel" data-panel="2" novalidate>
+        <h3>Dates &amp; mise à disposition</h3>
+        <div class="field-row" id="datesRow">
+          <div class="field">
+            <label for="wStart">Début de location</label>
+            <input type="date" id="wStart" required>
+            <p class="error" data-error="wStart">Indiquez une date de début (à partir de demain).</p>
+          </div>
+          <div class="field">
+            <label for="wEnd">Fin de location</label>
+            <input type="date" id="wEnd" required>
+            <p class="error" data-error="wEnd">La date de fin doit être après le début.</p>
+          </div>
+        </div>
+        <p class="duration-note" id="durationNote" hidden></p>
+        <div class="field">
+          <span class="label">Mise à disposition</span>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="wDelivery" value="retrait" checked>
+              <span><b>Retrait en agence</b><i>Offert — Dakar (SODIDA), Rufisque ou Thiès</i></span></label>
+            <label class="choice"><input type="radio" name="wDelivery" value="livraison">
+              <span><b>Livraison prioritaire avant 7 h</b><i>+ 40 000 FCFA HT aller-retour, Dakar et environs — déchargement et mise en main compris</i></span></label>
+          </div>
+        </div>
+        <div class="quote" id="quoteBox" hidden></div>
+        <div class="panel-actions">
+          <button type="button" class="btn btn-line" data-prev>Retour</button>
+          <button type="submit" class="btn btn-gold">Continuer</button>
+        </div>
+      </form>
+
+      <!-- Étape 3 -->
+      <form class="panel" data-panel="3" novalidate>
+        <h3>Vos coordonnées</h3>
+        <div class="field">
+          <span class="label">Vous êtes</span>
+          <div class="choices choices-row">
+            <label class="choice"><input type="radio" name="wType" value="pro" checked><span><b>Professionnel</b><i>Entreprise, artisan, collectivité</i></span></label>
+            <label class="choice"><input type="radio" name="wType" value="part"><span><b>Particulier</b><i>Pièce d'identité (CNI ou passeport) demandée au retrait</i></span></label>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="wName">Nom &amp; prénom *</label>
+            <input type="text" id="wName" autocomplete="name" required>
+            <p class="error" data-error="wName">Indiquez votre nom.</p>
+          </div>
+          <div class="field">
+            <label for="wCompany">Société / NINEA</label>
+            <input type="text" id="wCompany" autocomplete="organization" placeholder="Optionnel pour les particuliers">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="wEmail">E-mail *</label>
+            <input type="email" id="wEmail" autocomplete="email" autocapitalize="none" spellcheck="false"
+                   placeholder="nom@domaine.sn" required>
+            <p class="error" data-error="wEmail">Adresse e-mail invalide.</p>
+            <p class="hint" id="emailHint" hidden></p>
+          </div>
+          <div class="field">
+            <label for="wPhone">Téléphone *</label>
+            <div class="phone-row">
+              <div class="select-dial" id="wDial"></div>
+              <input type="tel" id="wPhone" autocomplete="tel-national" inputmode="tel" required>
+            </div>
+            <p class="error" data-error="wPhone">Numéro incomplet.</p>
+          </div>
+        </div>
+        <div id="addressField" hidden>
+          <div class="field-row">
+            <div class="field">
+              <label for="wAddress">Adresse de livraison *</label>
+              <input type="text" id="wAddress" autocomplete="street-address"
+                     placeholder="Rue, zone, repère (ex. Km 4,5 Bd du Centenaire)">
+              <p class="error" data-error="wAddress">Indiquez l'adresse précise du site.</p>
+            </div>
+            <div class="field">
+              <label for="wCity">Ville *</label>
+              <input type="text" id="wCity" list="cityList" autocomplete="address-level2"
+                     placeholder="Dakar, Pikine, Rufisque…">
+              <datalist id="cityList"></datalist>
+              <p class="error" data-error="wCity">Indiquez la ville.</p>
+            </div>
+          </div>
+        </div>
+        <input type="text" id="wWebsite" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="panel-actions">
+          <button type="button" class="btn btn-line" data-prev>Retour</button>
+          <button type="submit" class="btn btn-gold">Voir le récapitulatif</button>
+        </div>
+      </form>
+
+      <!-- Étape 4 -->
+      <form class="panel" data-panel="4" novalidate>
+        <h3>Récapitulatif</h3>
+        <div class="recap" id="recapBox"></div>
+        <label class="check">
+          <input type="checkbox" id="wCgl">
+          <span id="cglText">J'accepte les conditions générales de location et le dépôt d'une caution par empreinte bancaire.</span>
+        </label>
+        <p class="error" data-error="wCgl">Vous devez accepter les conditions pour confirmer.</p>
+        <div class="panel-actions">
+          <button type="button" class="btn btn-line" data-prev>Retour</button>
+          <button type="submit" class="btn btn-gold" id="wConfirmBtn">Confirmer la réservation</button>
+        </div>
+      </form>
+
+      <!-- Succès -->
+      <div class="panel panel-success" data-panel="5">
+        <div class="success-seal" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></svg>
+        </div>
+        <p class="overline" id="successOverline">Réservation enregistrée</p>
+        <h3 id="successRef"></h3>
+        <p id="successMsg"></p>
+        <p class="demo-link" id="successDemo" hidden></p>
+        <div class="panel-actions">
+          <span></span>
+          <button type="button" class="btn btn-gold" id="newBooking">Nouvelle réservation</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="data.js"></script>
+<script src="ui.js"></script>
+<script src="premium.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e7b94c"/>
+      <stop offset=".55" stop-color="#ca8a04"/>
+      <stop offset="1" stop-color="#a16207"/>
+    </linearGradient>
+  </defs>
+  <!-- Pastille pierre sombre + anneau or (charte NDIOBEEN GUI LOGISTIQUE) -->
+  <circle cx="32" cy="32" r="30" fill="#0c0a09"/>
+  <circle cx="32" cy="32" r="30" fill="none" stroke="url(#g)" stroke-width="2.5"/>
+  <!-- Monogramme « N » doré (adapté : NDIOBEEN) -->
+  <g fill="url(#g)">
+    <rect x="14" y="15" width="6" height="34" rx="1.5"/>
+    <rect x="44" y="15" width="6" height="34" rx="1.5"/>
+    <path d="M20 15 L26 15 L44 43 L44 15 L50 15 L32 49 L26 49 L20 35 Z" />
+  </g>
+</svg>
