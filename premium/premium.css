@@ -264,7 +264,7 @@ html[data-theme="light"] .icon-moon { fill: var(--gold); stroke: none; }
 /* ---------- Hero accueil : bannière photo pleine largeur ---------- */
 .hero-bleed {
   position: relative;
-  background: url("img/hero.jpg") center 35% / cover no-repeat;
+  background: url("img/bulldozer.png") center 35% / cover no-repeat;
   border-bottom: 1px solid var(--hairline);
   /* Le texte du hero reste clair sur la photo, quel que soit le thème */
   --text: #faf9f7;

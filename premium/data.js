@@ -175,15 +175,13 @@ const ART = {
 
 // ---------- Parc levage & manutention — listes officielles (6 matériels) ----------
 const EQUIPMENTS = [
-  { id: "grue-mobile", name: "Grue mobile", cat: "Grues", price: 220000, sale: 98000000, caution: 2500000, sectors: ["BTP","Levage"], spec: "Grue mobile polyvalente pour levage sur chantier", img: "img/grue-mobile.jpg", art: "shopCrane", stock: 3 },
-    { id: "pelle-hydraulique", name: "Pelle hydraulique", cat: "Pelles", price: 180000, sale: 72000000, caution: 1800000, sectors: ["BTP","Terrassement"], spec: "Pelle hydraulique sur chenilles pour excavation", img: "img/telescopique.jpg", art: "boom", stock: 3 },
-    { id: "manitou-telescopique", name: "Manitou télescopique", cat: "Manitou", price: 140000, sale: 48000000, caution: 1500000, sectors: ["BTP","Logistique"], spec: "Chariot télescopique Manitou pour manutention et élevage", img: "img/telescopique.jpg", art: "telehandler", stock: 3 },
-    { id: "chargeuse", name: "Chargeuse sur pneus", cat: "Chargeuses", price: 160000, sale: 64000000, caution: 1800000, sectors: ["BTP","Terrassement"], spec: "Chargeuse sur pneus pour chargement et déplacement de matériaux", img: "img/chariot-diesel.jpg", art: "telehandler", stock: 3 },
-    { id: "tractopelle", name: "Tractopelle", cat: "Tractopelles", price: 150000, sale: 58000000, caution: 1700000, sectors: ["BTP","Travaux"], spec: "Tractopelle polyvalent pour terrassement et rétro", img: "img/telescopique.jpg", art: "boom", stock: 3 },
-    { id: "bulldozer", name: "Bulldozer", cat: "Bulldozers", price: 240000, sale: 120000000, caution: 3000000, sectors: ["BTP","Terrassement"], spec: "Bulldozer pour terrassement, nivellement et poussée de matériaux", img: "img/hero.jpg", art: "shopCrane", stock: 3 },
+  { id: "grue-mobile",          name: "Grue mobile",           cat: "Grues",       price: 220000, sale: 98000000,  caution: 2500000, sectors: ["BTP","Levage"],       spec: "Grue mobile polyvalente pour levage sur chantier",                     img: "img/grue-mobile.png",          art: "shopCrane",   stock: 3 },
+  { id: "pelle-hydraulique",    name: "Pelle hydraulique",     cat: "Pelles",      price: 180000, sale: 72000000,  caution: 1800000, sectors: ["BTP","Terrassement"], spec: "Pelle hydraulique sur chenilles pour excavation",                       img: "img/pelle-hydraulique.png",     art: "boom",        stock: 3 },
+  { id: "manitou-telescopique", name: "Manitou télescopique",  cat: "Manitou",     price: 140000, sale: 48000000,  caution: 1500000, sectors: ["BTP","Logistique"],   spec: "Chariot télescopique Manitou pour manutention et élévation",           img: "img/manitou-telescopique.png",  art: "telehandler", stock: 3 },
+  { id: "chargeuse",            name: "Chargeuse sur pneus",   cat: "Chargeuses",  price: 160000, sale: 64000000,  caution: 1800000, sectors: ["BTP","Terrassement"], spec: "Chargeuse sur pneus pour chargement et déplacement de matériaux",      img: "img/chargeuse.png",            art: "telehandler", stock: 3 },
+  { id: "tractopelle",          name: "Tractopelle",           cat: "Tractopelles",price: 150000, sale: 58000000,  caution: 1700000, sectors: ["BTP","Travaux"],      spec: "Tractopelle polyvalent pour terrassement et rétro",                    img: "img/tractopelle.png",          art: "boom",        stock: 3 },
+  { id: "bulldozer",            name: "Bulldozer",             cat: "Bulldozers",  price: 240000, sale: 120000000, caution: 3000000, sectors: ["BTP","Terrassement"], spec: "Bulldozer pour terrassement, nivellement et poussée de matériaux",     img: "img/bulldozer.png",            art: "shopCrane",   stock: 3 },
 ];
-
-const CATEGORIES = ["Tout", ...new Set(EQUIPMENTS.map(e => e.cat))];
 
 const CATEGORIES = ["Tout", ...new Set(EQUIPMENTS.map(e => e.cat))];
 const SECTORS = ["BTP", "Industrie", "Logistique"];

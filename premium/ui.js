@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <nav aria-label="Navigation pied de page">
         ${PAGES.slice(1).map(([href, label]) => `<a href="${href}">${label}</a>`).join("")}
       </nav>
-      <small>© ${new Date().getFullYear()} NDIOBEEN GUI LOGISTIQUE — Dakar, Sénégal. Site de démonstration — prix et coordonnées fictifs.</small>
+      <small>© ${new Date().getFullYear()} NDIOBEEN GUI LOGISTIQUE — Dakar, Sénégal. Tous droits réservés.</small>
     </div>`;
   document.body.appendChild(footer);
 
