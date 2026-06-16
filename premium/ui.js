@@ -117,6 +117,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const open = navLinks.classList.toggle("is-open");
     burger.setAttribute("aria-expanded", open);
   });
+  // Fermer le menu quand on clique un lien (mobile)
+  navLinks.querySelectorAll("a").forEach(a => {
+    a.addEventListener("click", () => {
+      navLinks.classList.remove("is-open");
+      burger.setAttribute("aria-expanded", "false");
+    });
+  });
+  // Fermer le menu au clic hors du header (mobile)
+  document.addEventListener("click", e => {
+    if (!navShell.contains(e.target) && navLinks.classList.contains("is-open")) {
+      navLinks.classList.remove("is-open");
+      burger.setAttribute("aria-expanded", "false");
+    }
+  });
 
   // ---------- Apparitions au scroll ----------
   const io = new IntersectionObserver(entries => {
