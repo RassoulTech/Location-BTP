@@ -1,18 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#e7b94c"/>
-      <stop offset=".55" stop-color="#ca8a04"/>
-      <stop offset="1" stop-color="#a16207"/>
+      <stop offset="0" stop-color="#f0c969"/>
+      <stop offset=".5" stop-color="#ca8a04"/>
+      <stop offset="1" stop-color="#92610a"/>
     </linearGradient>
   </defs>
-  <!-- Pastille pierre sombre + anneau or (charte NDIOBEEN GUI LOGISTIQUE) -->
-  <circle cx="32" cy="32" r="30" fill="#0c0a09"/>
-  <circle cx="32" cy="32" r="30" fill="none" stroke="url(#g)" stroke-width="2.5"/>
-  <!-- Monogramme « N » doré (adapté : NDIOBEEN) -->
-  <g fill="url(#g)">
-    <rect x="14" y="15" width="6" height="34" rx="1.5"/>
-    <rect x="44" y="15" width="6" height="34" rx="1.5"/>
-    <path d="M20 15 L26 15 L44 43 L44 15 L50 15 L32 49 L26 49 L20 35 Z" />
-  </g>
+  <!-- Fond sombre premium -->
+  <rect width="64" height="64" rx="14" fill="#0c0a09"/>
+  <!-- Anneau or fin -->
+  <rect x="2" y="2" width="60" height="60" rx="12" fill="none" stroke="url(#g)" stroke-width="1.8"/>
+  <!-- Monogramme N — deux jambages + diagonale nette -->
+  <path d="M17 48 V16 h5.5 l19 24.5 V16 H47 V48 h-5.5 L22.5 23.5 V48 Z" fill="url(#g)"/>
 </svg>
