@@ -22,9 +22,9 @@
     <p class="overline reveal">La Flotte — Location &amp; vente</p>
     <h1 class="reveal d1">Des machines <em>choisies une à une.</em></h1>
     <p class="section-lede reveal d2">
-      En location au jour ou à l'achat, en FCFA HT, hors transport. Chaque engin est contrôlé
-      sur 52 points avant de quitter nos ateliers de Dakar. Basculez entre
-      <strong>Location</strong> et <strong>Vente</strong>, puis cliquez une machine.
+      Chaque engin est contrôlé sur 52 points avant de quitter nos ateliers de Dakar.
+      Basculez entre <strong>Location</strong> et <strong>Vente</strong>, puis sélectionnez une machine
+      pour préparer une demande WhatsApp contextualisée.
     </p>
   </header>
 
@@ -41,7 +41,7 @@
             Vente
           </button>
         </div>
-        <p class="mode-caption" id="modeCaption">Tarifs de location en FCFA HT par jour.</p>
+        <p class="mode-caption" id="modeCaption">Sélectionnez un matériel pour lancer une demande de location sur WhatsApp.</p>
       </div>
 
       <div class="toolbar-row">
@@ -69,17 +69,6 @@
         <div class="chip-group" id="sectorChips" role="group" aria-label="Secteurs — sélection multiple"></div>
       </div>
 
-      <div class="toolbar-row">
-        <div id="dispoChips" role="group" aria-label="Disponibilité — sélection multiple" style="display:flex;flex-wrap:wrap;gap:.9rem"></div>
-        <div class="range-wrap" aria-label="Fourchette de prix">
-          <div class="range-labels"><span id="rangeUnitLabel">Prix / jour</span><span id="rangeLabel"></span></div>
-          <div class="range-track">
-            <div class="range-fill" id="rangeFill"></div>
-            <input type="range" class="range-input" id="rangeMin" min="0" step="5000" value="0" aria-label="Prix minimum">
-            <input type="range" class="range-input" id="rangeMax" min="0" step="5000" aria-label="Prix maximum">
-          </div>
-        </div>
-      </div>
       <p class="results-note" id="resultsNote" role="status"></p>
     </div>
     <div class="fleet-grid" id="catalogGrid"></div>

@@ -7,6 +7,49 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const WHATSAPP_NUMBER = "221782953780";
+
+  function whatsappUrl({
+    equipment,
+    image,
+    requestType = "Information",
+    name,
+    phone,
+    email,
+    company,
+    comment,
+    qty,
+    start,
+    end,
+    delivery,
+  } = {}) {
+    const lines = [
+      "Bonjour,",
+      "",
+      `Type de demande : ${requestType}`,
+    ];
+    if (equipment) lines.push(`Matériel : ${equipment}`);
+    if (image) {
+      const url = image.startsWith("http") ? image : `${location.origin}/${image.replace(/^\/+/, "")}`;
+      lines.push(`Photo du matériel : ${url}`);
+    }
+    if (qty) lines.push(`Quantité souhaitée : ${qty}`);
+    if (start || end) lines.push(`Période souhaitée : ${start || "à préciser"} au ${end || "à préciser"}`);
+    if (delivery) lines.push(`Mise à disposition : ${delivery}`);
+    lines.push("");
+    if (name) lines.push(`Nom : ${name}`);
+    if (company) lines.push(`Entreprise : ${company}`);
+    if (phone) lines.push(`Téléphone : ${phone}`);
+    if (email) lines.push(`E-mail : ${email}`);
+    if (comment) lines.push("", "Commentaire :", comment);
+    lines.push("", "Merci de me recontacter afin que nous puissions échanger sur cette demande.");
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join("\n"))}`;
+  }
+
+  function openWhatsApp(url) {
+    const win = window.open(url, "_blank", "noopener");
+    if (!win) location.href = url;
+  }
 
   /* ════════════════ Stock en direct (serveur) ════════════════ */
   // Le serveur est la source de vérité ; sans serveur (file://) on garde le stock du catalogue.
@@ -186,7 +229,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             : ART[e.art](e.id + "-sl")}</div>
           <div class="slide-cap">
             <div><strong>${e.name}</strong><span>${e.spec}</span></div>
-            <a class="btn btn-line" href="reservation.html?machine=${e.id}">${money(e.price)} / j</a>
+            <a class="btn btn-line" href="reservation.html?machine=${e.id}">Demander des infos</a>
           </div>
         </div>`).join("")}
       <div class="slider-nav">
@@ -218,16 +261,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   /* ════════════════ Cartes machines ════════════════ */
   function cardHTML(e, i = 0, mode = "location") {
     const sale = mode === "vente";
-    const main = sale
-      ? `<div class="price">${money(e.sale)}<small>HT — à l'achat</small></div>`
-      : `<div class="price">${money(e.price)}<small>HT / jour</small></div>`;
-    const cross = sale
-      ? `<span class="price-alt">ou en location dès ${money(e.price)}/j</span>`
-      : `<span class="price-alt">ou à l'achat dès ${moneyShort(e.sale)}</span>`;
-    const cta = sale ? "Devis d'achat" : "Réserver";
+    const intent = sale ? "Achat sur demande" : "Location sur demande";
+    const cta = sale ? "Acheter ce matériel" : "Louer ce matériel";
     const aria = sale
-      ? `Demander un devis d'achat pour ${e.name}, ${money(e.sale)} HT`
-      : `Réserver ${e.name}, ${money(e.price)} HT par jour`;
+      ? `Demander des informations d'achat pour ${e.name}`
+      : `Demander des informations de location pour ${e.name}`;
     return `
     <article class="card" data-reserve="${e.id}" data-mode="${mode}" tabindex="0" role="button" style="--i:${i}"
              aria-label="${aria}">
@@ -240,7 +278,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       <h3>${e.name}</h3>
       <p class="card-spec">${e.spec}</p>
       <div class="card-foot">
-        <div class="price-wrap">${main}${cross}</div>
+        <div class="request-wrap">
+          <span class="request-kicker">${intent}</span>
+          <span class="request-copy">Un conseiller confirme les conditions sur WhatsApp.</span>
+        </div>
         <span class="btn btn-line">${cta}</span>
       </div>
     </article>`;
@@ -268,9 +309,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   /* ════════════════ Catalogue : filtres premium + bascule location/vente ════════════════ */
   const grid = $("#catalogGrid");
   if (grid) {
-    const state = { mode: "location", cats: new Set(), sectors: new Set(), q: "", min: 0, max: Infinity, sort: "featured" };
-    const priceOf = e => state.mode === "vente" ? e.sale : e.price;
-    const modeMax = () => Math.max(...EQUIPMENTS.map(priceOf));
+    const state = { mode: "location", cats: new Set(), sectors: new Set(), q: "", sort: "featured" };
 
     // — Recherche instantanée
     const searchInput = $("#searchInput");
@@ -288,7 +327,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     // — Bascule Location / Vente
     const modeSwitch = $("#modeSwitch");
     const modeCaption = $("#modeCaption");
-    const rangeUnitLabel = $("#rangeUnitLabel");
 
     // — Puces catégories (multi-sélection)
     const catBox = $("#catChips");
@@ -332,26 +370,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Disponibilité: badges removed (no admin page to manage stock) — UI does not show availability filters.
 
-    // — Double curseur de prix (bornes selon le mode actif)
-    const rMin = $("#rangeMin"), rMax = $("#rangeMax"), rFill = $("#rangeFill"), rLabel = $("#rangeLabel");
-    function syncRange(fromUser = true) {
-      const PMAX = +rMax.max || modeMax();
-      let lo = Math.min(+rMin.value, +rMax.value), hi = Math.max(+rMin.value, +rMax.value);
-      state.min = lo; state.max = hi;
-      rFill.style.left = (lo / PMAX * 100) + "%";
-      rFill.style.width = ((hi - lo) / PMAX * 100) + "%";
-      rLabel.innerHTML = `<b>${money(lo)}</b> — <b>${money(hi)}</b>`;
-      if (fromUser) render();
-    }
-    function applyModeToRange() {
-      const max = modeMax();
-      const step = state.mode === "vente" ? 500000 : 5000;
-      rMin.max = rMax.max = max; rMin.step = rMax.step = step;
-      rMin.value = 0; rMax.value = max;
-      syncRange(false);
-    }
-    [rMin, rMax].forEach(r => r.addEventListener("input", () => syncRange()));
-
     function setMode(m, doRender = true) {
       state.mode = m === "vente" ? "vente" : "location";
       if (modeSwitch) modeSwitch.querySelectorAll(".mode-opt").forEach(b => {
@@ -360,10 +378,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         b.setAttribute("aria-pressed", on);
       });
       if (modeCaption) modeCaption.textContent = state.mode === "vente"
-        ? "Prix d'achat indicatifs en FCFA HT — devis ferme sous 24 h."
-        : "Tarifs de location en FCFA HT par jour.";
-      if (rangeUnitLabel) rangeUnitLabel.textContent = state.mode === "vente" ? "Prix d'achat" : "Prix / jour";
-      applyModeToRange();
+        ? "Selectionnez un materiel pour lancer une demande d'achat sur WhatsApp."
+        : "Selectionnez un materiel pour lancer une demande de location sur WhatsApp.";
       if (doRender) render();
     }
     if (modeSwitch) modeSwitch.addEventListener("click", e => {
@@ -377,9 +393,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       value: "featured",
       options: [
         { value: "featured",   label: "Sélection maison" },
-        { value: "price-asc",  label: "Prix croissant" },
-        { value: "price-desc", label: "Prix décroissant" },
         { value: "name",       label: "Nom A → Z" },
+        { value: "cat",        label: "Catégorie" },
       ],
       onChange: v => { state.sort = v; render(); },
     });
@@ -387,31 +402,26 @@ document.addEventListener("DOMContentLoaded", async () => {
     // — Réinitialisation
     const resetBtn = $("#resetFilters");
     resetBtn.addEventListener("click", () => {
-      state.cats.clear(); state.sectors.clear(); state.dispos.clear(); state.q = "";
+      state.cats.clear(); state.sectors.clear(); state.q = "";
       state.sort = "featured";
       searchInput.value = ""; searchClear.hidden = true;
       sortSel.set("featured");
       $$(".chip[aria-pressed]").forEach(c => c.setAttribute("aria-pressed", "false"));
-      applyModeToRange();
       render();
     });
 
     function isFiltered() {
-      return state.cats.size || state.sectors.size || state.dispos.size || state.q ||
-             state.min > 0 || state.max < modeMax() || state.sort !== "featured";
+      return state.cats.size || state.sectors.size || state.q || state.sort !== "featured";
     }
 
     function render() {
       let list = EQUIPMENTS.filter(e =>
         (!state.cats.size || state.cats.has(e.cat)) &&
         (!state.sectors.size || e.sectors.some(s => state.sectors.has(s))) &&
-        (!state.dispos.size || state.dispos.has(stockBucket(stockOf(e)))) &&
-        priceOf(e) >= state.min && priceOf(e) <= state.max &&
         (!state.q || (e.name + " " + e.spec + " " + e.cat + " " + e.sectors.join(" ")).toLowerCase().includes(state.q))
       );
-      if (state.sort === "price-asc") list = [...list].sort((a, b) => priceOf(a) - priceOf(b));
-      if (state.sort === "price-desc") list = [...list].sort((a, b) => priceOf(b) - priceOf(a));
       if (state.sort === "name") list = [...list].sort((a, b) => a.name.localeCompare(b.name, "fr"));
+      if (state.sort === "cat") list = [...list].sort((a, b) => a.cat.localeCompare(b.cat, "fr") || a.name.localeCompare(b.name, "fr"));
 
       grid.innerHTML = list.map((e, i) => cardHTML(e, Math.min(i, 8), state.mode)).join("");
       $("#catalogEmpty").hidden = list.length > 0;
@@ -454,7 +464,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const wStart = $("#wStart");
     const wEnd = $("#wEnd");
 
-    /* — Mode location ↔ vente (devis d'achat) — */
+    /* — Mode location ↔ vente (demande d'achat) — */
     let wMode = new URLSearchParams(location.search).get("mode") === "vente" ? "vente" : "location";
     const wModeSwitch = $("#wModeSwitch");
     const datesRow = $("#datesRow");
@@ -478,9 +488,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (step2Title) step2Title.textContent = sale ? "Livraison & mise en service" : "Dates & mise à disposition";
       if (step2Label) step2Label.textContent = sale ? "Livraison" : "Dates";
       if (cglText) cglText.textContent = sale
-        ? "J'accepte les conditions générales de vente et le versement d'un acompte de 30 % à la commande."
-        : "J'accepte les conditions générales de location et le dépôt d'une caution par empreinte bancaire.";
-      if (confirmBtn) confirmBtn.textContent = sale ? "Demander le devis d'achat" : "Confirmer la réservation";
+        ? "J'accepte d'etre contacte sur WhatsApp pour finaliser ma demande d'achat."
+        : "J'accepte d'etre contacte sur WhatsApp pour finaliser ma demande de location.";
+      if (confirmBtn) confirmBtn.textContent = sale ? "Contacter sur WhatsApp" : "Contacter sur WhatsApp";
       onEquipChange();
       updateQuote();
     }
@@ -503,7 +513,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 aria-selected="${e.id === wEquip.value}">
           ${e.img ? `<img src="${e.img}" alt="" loading="lazy">` : `<span class="cb-art">${ART[e.art](e.id + "-cb")}</span>`}
           <span><span class="cb-name">${e.name}</span><span class="cb-cat">${e.cat}</span></span>
-          <span class="cb-price">${money(wMode === "vente" ? e.sale : e.price)}<small>${wMode === "vente" ? "" : " /j"}</small></span>
+          <span class="cb-action">${wMode === "vente" ? "Achat" : "Location"}</span>
         </button>`).join("")
         : `<p class="cb-empty">Aucune machine ne correspond.</p>`;
       cbActive = -1;
@@ -597,23 +607,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       const e = getEquip();
       const qty = Math.max(1, +wQty.value || 1);
       if (!e) return null;
-      const delivery = document.querySelector("[name=wDelivery]:checked").value === "livraison" ? DELIVERY_COST : 0;
-
-      if (wMode === "vente") {
-        const base = e.sale * qty;
-        const ht = base + delivery;
-        const ttc = ht * (1 + TVA);
-        return { mode: "vente", e, qty, unit: e.sale, base, delivery, ht, ttc, deposit: Math.round(ttc * DEPOSIT_RATE) };
-      }
+      if (wMode === "vente") return { mode: "vente", e, qty };
 
       const days = getDays();
       if (days < 1) return null;
-      const base = e.price * days * qty;
-      const rate = days >= 30 ? 0.20 : days >= 7 ? 0.10 : 0;
-      const discount = Math.round(base * rate);
-      const ht = base - discount + delivery;
-      const ttc = ht * (1 + TVA);
-      return { mode: "location", e, qty, days, base, rate, discount, delivery, ht, ttc, caution: e.caution * qty };
+      return { mode: "location", e, qty, days };
     }
 
     function updateQuote() {
@@ -625,33 +623,22 @@ document.addEventListener("DOMContentLoaded", async () => {
         else {
           const d = getDays();
           note.hidden = d < 1;
-          if (d >= 1) note.textContent = `${d} jour${d > 1 ? "s" : ""}` +
-            (d >= 30 ? " — tarif dégressif −20 % appliqué" : d >= 7 ? " — tarif dégressif −10 % appliqué" : d >= 5 ? ` — encore ${7 - d} j pour −10 %` : "");
+          if (d >= 1) note.textContent = `${d} jour${d > 1 ? "s" : ""} selectionne${d > 1 ? "s" : ""}`;
         }
       }
       if (!q) { box.hidden = true; return; }
       box.hidden = false;
-      if (q.mode === "vente") {
-        box.innerHTML = `
-          <table>
-            <tr><td>${q.e.name} — prix d'achat unitaire</td><td>${money(q.unit)}</td></tr>
-            <tr><td>Quantité</td><td>× ${q.qty}</td></tr>
-            ${q.delivery ? `<tr><td>Livraison &amp; déchargement</td><td>${money(q.delivery)}</td></tr>` : ""}
-            <tr><td>TVA ${Math.round(TVA * 100)} %</td><td>${money(q.ht * TVA)}</td></tr>
-            <tr class="q-total"><td>Total TTC estimé</td><td>${money(q.ttc)}</td></tr>
-          </table>
-          <p class="q-note">Devis ferme sous 24 h — acompte ${money(q.deposit)} (30 %) à la commande, garantie constructeur incluse.</p>`;
-      } else {
-        box.innerHTML = `
-          <table>
-            <tr><td>${q.e.name} × ${q.qty} — ${q.days} jour${q.days > 1 ? "s" : ""}</td><td>${money(q.base)}</td></tr>
-            ${q.discount ? `<tr class="q-discount"><td>Tarif dégressif (−${q.rate * 100} % dès ${q.days >= 30 ? 30 : 7} j)</td><td>−${money(q.discount)}</td></tr>` : ""}
-            ${q.delivery ? `<tr><td>Livraison prioritaire A/R</td><td>${money(q.delivery)}</td></tr>` : ""}
-            <tr><td>TVA ${Math.round(TVA * 100)} %</td><td>${money(q.ht * TVA)}</td></tr>
-            <tr class="q-total"><td>Total TTC</td><td>${money(q.ttc)}</td></tr>
-          </table>
-          <p class="q-note">Caution : ${money(q.caution)} par empreinte bancaire, non débitée.</p>`;
-      }
+      const delivery = document.querySelector("[name=wDelivery]:checked").value === "livraison"
+        ? "Livraison souhaitee"
+        : "Retrait en agence";
+      box.innerHTML = `
+        <div class="quote-request">
+          <span>${q.mode === "vente" ? "Demande d'achat" : "Demande de location"}</span>
+          <strong>${q.e.name} x ${q.qty}</strong>
+          <p>${q.mode === "vente"
+            ? "Un conseiller reprend votre besoin sur WhatsApp pour confirmer la disponibilite, les options et les conditions."
+            : `Periode : ${q.days} jour${q.days > 1 ? "s" : ""}. ${delivery}. Un conseiller finalise les conditions sur WhatsApp.`}</p>
+        </div>`;
     }
 
     ["change", "input"].forEach(evt => {
@@ -670,7 +657,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           ? `<img src="${e.img}" alt="${e.name}" loading="lazy" onerror="__artFallback(this,'shopCrane','${e.id}-pvfb')">`
           : ART[e.art](e.id + "-pv")}</div>
         <div><div class="p-name">${e.name}</div>        <div class="p-spec">${e.spec}</div></div>
-        <div class="p-price">${money(wMode === "vente" ? e.sale : e.price)}<small>${wMode === "vente" ? "HT — à l'achat" : "HT / jour"}</small></div>`;
+        <div class="p-action">${wMode === "vente" ? "Achat" : "Location"} sur WhatsApp</div>`;
       setError("wEquip", false);
       wQty.dispatchEvent(new Event("change")); // recadre la quantité selon le stock
       updateQuote();
@@ -681,7 +668,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }));
 
     /* — Champs intelligents (étape 3) — */
-    const wName = $("#wName"), wEmail = $("#wEmail"), wPhone = $("#wPhone"), wAddress = $("#wAddress"), wCity = $("#wCity");
+    const wName = $("#wName"), wEmail = $("#wEmail"), wPhone = $("#wPhone"), wAddress = $("#wAddress"), wCity = $("#wCity"), wMsg = $("#wMsg");
     [wName, wEmail, wAddress, wCity].forEach(addOkIcon);
 
     // Datalist villes
@@ -764,28 +751,30 @@ document.addEventListener("DOMContentLoaded", async () => {
       const delivery = document.querySelector("[name=wDelivery]:checked").value;
       const fmt = d => new Date(d).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
       const client = `${wName.value}${$("#wCompany").value ? " — " + $("#wCompany").value : ""}`;
+      const deliveryLabel = delivery === "livraison" ? "Livraison souhaitee" : "Retrait en agence";
+      const comment = wMsg?.value.trim();
       if (q.mode === "vente") {
         $("#recapBox").innerHTML = `
           <dl>
             <dt>Matériel</dt><dd>${q.e.name} × ${q.qty}</dd>
-            <dt>Formule</dt><dd>Achat — devis ferme sous 24 h</dd>
-            <dt>Remise</dt><dd>${delivery === "livraison" ? "Livraison : " + wAddress.value + ", " + wCity.value : "Enlèvement en agence"}</dd>
+            <dt>Demande</dt><dd>Achat du materiel</dd>
+            <dt>Mise a dispo</dt><dd>${delivery === "livraison" ? "Livraison : " + wAddress.value + ", " + wCity.value : deliveryLabel}</dd>
             <dt>Client</dt><dd>${client}</dd>
             <dt>Contact</dt><dd>${wEmail.value} · ${phone.e164()}</dd>
-            <dt>Acompte</dt><dd>${money(q.deposit)} (30 % à la commande)</dd>
+            ${comment ? `<dt>Commentaire</dt><dd>${comment}</dd>` : ""}
           </dl>
-          <div class="recap-total"><span>Total TTC estimé</span><strong>${money(q.ttc)}</strong></div>`;
+          <div class="recap-total"><span>Prochaine etape</span><strong>WhatsApp</strong></div>`;
       } else {
         $("#recapBox").innerHTML = `
           <dl>
             <dt>Matériel</dt><dd>${q.e.name} × ${q.qty}</dd>
             <dt>Période</dt><dd>du ${fmt(wStart.value)} au ${fmt(wEnd.value)} (${q.days} j)</dd>
-            <dt>Mise à dispo</dt><dd>${delivery === "livraison" ? "Livraison : " + wAddress.value + ", " + wCity.value : "Retrait en agence"}</dd>
+            <dt>Mise à dispo</dt><dd>${delivery === "livraison" ? "Livraison : " + wAddress.value + ", " + wCity.value : deliveryLabel}</dd>
             <dt>Client</dt><dd>${client}</dd>
             <dt>Contact</dt><dd>${wEmail.value} · ${phone.e164()}</dd>
-            <dt>Caution</dt><dd>${money(q.caution)} (empreinte non débitée)</dd>
+            ${comment ? `<dt>Commentaire</dt><dd>${comment}</dd>` : ""}
           </dl>
-          <div class="recap-total"><span>Total TTC</span><strong>${money(q.ttc)}</strong></div>`;
+          <div class="recap-total"><span>Prochaine etape</span><strong>WhatsApp</strong></div>`;
       }
     }
 
@@ -793,41 +782,44 @@ document.addEventListener("DOMContentLoaded", async () => {
       const sale = wMode === "vente";
       setLoading(btn, true);
       try {
-        const data = await api("/api/bookings", {
-          mode: wMode,
-          equip: wEquip.value,
-          qty: +wQty.value,
-          start: sale ? "" : wStart.value,
-          end: sale ? "" : wEnd.value,
-          delivery: document.querySelector("[name=wDelivery]:checked").value,
-          clientType: document.querySelector("[name=wType]:checked").value,
+        const q = getQuote();
+        if (!q) throw new Error("Completez les informations de votre demande.");
+        const deliveryValue = document.querySelector("[name=wDelivery]:checked").value;
+        const delivery = deliveryValue === "livraison"
+          ? `Livraison souhaitee${wAddress.value.trim() || wCity.value.trim() ? " : " + [wAddress.value.trim(), wCity.value.trim()].filter(Boolean).join(", ") : ""}`
+          : "Retrait en agence";
+        const url = whatsappUrl({
+          equipment: q.e.name,
+          image: q.e.img,
+          requestType: sale ? "Achat" : "Location",
           name: wName.value.trim(),
           company: $("#wCompany").value.trim(),
-          email: wEmail.value.trim(),
           phone: phone.e164(),
-          address: wAddress.value.trim(),
-          city: wCity.value.trim(),
-          website: $("#wWebsite").value, // honeypot
+          email: wEmail.value.trim(),
+          comment: wMsg?.value.trim(),
+          qty: q.qty,
+          start: sale ? "" : wStart.value,
+          end: sale ? "" : wEnd.value,
+          delivery,
         });
+        const ref = "WA-" + Date.now().toString(36).toUpperCase();
 
         try {
           const all = JSON.parse(localStorage.getItem("ndiobeen-bookings") || "[]");
-          all.push({ ref: data.ref, mode: wMode, equip: wEquip.value, totalTTC: data.totalTTC, createdAt: new Date().toISOString() });
+          all.push({ ref, mode: wMode, equip: wEquip.value, createdAt: new Date().toISOString() });
           localStorage.setItem("ndiobeen-bookings", JSON.stringify(all));
         } catch (_) { /* stockage local indisponible : sans incidence */ }
 
-        // Met à jour le stock local avec la valeur renvoyée par le serveur
-        if (liveStock && typeof data.stock === "number") liveStock[wEquip.value] = data.stock;
-
-        if (successOverline) successOverline.textContent = sale ? "Demande de devis enregistrée" : "Réservation enregistrée";
-        $("#successRef").textContent = "Référence " + data.ref;
+        if (successOverline) successOverline.textContent = sale ? "Demande d'achat prete" : "Demande de location prete";
+        $("#successRef").textContent = "Conversation WhatsApp";
         $("#successMsg").textContent = sale
-          ? `Merci ${wName.value.trim().split(" ")[0]}. Votre demande d'achat est enregistrée. Cliquez sur le bouton ci‑dessous pour finaliser via WhatsApp.`
-          : `Merci ${wName.value.trim().split(" ")[0]}. Votre réservation est enregistrée. Cliquez sur le bouton ci‑dessous pour finaliser via WhatsApp.`;
+          ? `Merci ${wName.value.trim().split(" ")[0]}. Votre message d'achat est pret avec le materiel et vos coordonnees.`
+          : `Merci ${wName.value.trim().split(" ")[0]}. Votre message de location est pret avec le materiel, la periode et vos coordonnees.`;
         const demo = $("#successDemo");
         demo.hidden = false;
-        demo.innerHTML = `<a class="btn btn-gold" href="${data.whatsappUrl}" target="_blank" rel="noopener">Finaliser via WhatsApp</a>`;
+        demo.innerHTML = `<a class="btn btn-gold" href="${url}" target="_blank" rel="noopener">Ouvrir WhatsApp</a>`;
         goToStep(5);
+        openWhatsApp(url);
       } catch (err) {
         toast(err.message, "err");
       } finally {
@@ -871,19 +863,21 @@ document.addEventListener("DOMContentLoaded", async () => {
       const btn = contactForm.querySelector("button[type=submit]");
       setLoading(btn, true);
       try {
-        const data = await api("/api/contact", {
+        const url = whatsappUrl({
+          equipment: "Demande generale",
+          requestType: "Information",
           name: cName.value.trim(),
-          email: cEmail.value.trim(),
           phone: phone && cPhone.value.trim() ? phone.e164() : "",
-          message: cMsg.value.trim(),
-          website: $("#cWebsite") ? $("#cWebsite").value : "",
+          email: cEmail.value.trim(),
+          comment: cMsg.value.trim(),
         });
         const ok = $("#contactOk");
         ok.hidden = false;
-        ok.innerHTML = `Message reçu — pour finaliser rapidement, contactez via WhatsApp : <a class="btn btn-gold" href="${data.whatsappUrl}" target="_blank" rel="noopener">Ouvrir WhatsApp</a>`;
+        ok.innerHTML = `Message pret — WhatsApp va s'ouvrir avec votre demande : <a class="btn btn-gold" href="${url}" target="_blank" rel="noopener">Ouvrir WhatsApp</a>`;
+        openWhatsApp(url);
         contactForm.reset();
         contactForm.querySelectorAll(".field").forEach(f => f.classList.remove("has-ok", "has-error"));
-        toast("Votre message a bien été envoyé.", "ok");
+        toast("Votre message WhatsApp est pret.", "ok");
       } catch (err) {
         toast(err.message, "err");
       } finally {

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Réservation &amp; devis d'achat — NDIOBEEN GUI LOGISTIQUE</title>
-<meta name="description" content="Location ou achat de matériel de levage en 4 étapes : matériel, dates, coordonnées, confirmation. Devis instantané, sans paiement en ligne.">
+<title>Demande WhatsApp — Location &amp; achat — NDIOBEEN GUI LOGISTIQUE</title>
+<meta name="description" content="Location ou achat de matériel de levage en 4 étapes : matériel, dates, coordonnées, confirmation WhatsApp.">
 <script>document.documentElement.dataset.theme = localStorage.getItem("ndiobeen-theme") || "dark";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,18 +19,18 @@
 <main>
 
   <header class="page-hero">
-    <p class="overline reveal">Réservation &amp; achat</p>
-    <h1 class="reveal d1">Quatre étapes, <em>trois minutes.</em></h1>
+    <p class="overline reveal">Demande WhatsApp</p>
+    <h1 class="reveal d1">Un besoin clair, <em>un échange direct.</em></h1>
     <p class="section-lede reveal d2">
-      Location ou achat&nbsp;: devis instantané, sans paiement en ligne. En location, vous réglez
-      à la remise du matériel&nbsp;; à l'achat, un devis ferme vous parvient sous 24&nbsp;heures.
+      Location ou achat&nbsp;: renseignez le matériel, vos coordonnées et vos contraintes.
+      Le message WhatsApp est préparé automatiquement pour poursuivre avec notre équipe.
     </p>
   </header>
 
   <section class="section">
     <p class="wizard-note reveal">
-      Location ou achat&nbsp;? Basculez à tout moment ci-dessous. Première visite&nbsp;?
-      Découvrez d'abord <a href="services.html">nos services et le déroulé</a>.
+      Location ou achat&nbsp;? Basculez à tout moment ci-dessous. Votre demande reste simple,
+      sans compte et sans paiement en ligne.
     </p>
 
     <div class="wizard reveal" id="wizard">
@@ -45,7 +45,7 @@
             Achat
           </button>
         </div>
-        <p class="wizard-mode-note">Le devis et les étapes s'adaptent automatiquement à votre choix.</p>
+        <p class="wizard-mode-note">Le message WhatsApp et les étapes s'adaptent automatiquement à votre choix.</p>
       </div>
       <ol class="steps" id="stepsBar">
         <li class="step is-active" data-step="1"><b>I</b><span>Matériel</span></li>
@@ -105,7 +105,7 @@
             <label class="choice"><input type="radio" name="wDelivery" value="retrait" checked>
               <span><b>Retrait en agence</b><i>Offert — Dakar (SODIDA), Rufisque ou Thiès</i></span></label>
             <label class="choice"><input type="radio" name="wDelivery" value="livraison">
-              <span><b>Livraison prioritaire avant 7 h</b><i>+ 40 000 FCFA HT aller-retour, Dakar et environs — déchargement et mise en main compris</i></span></label>
+              <span><b>Livraison prioritaire avant 7 h</b><i>Dakar et environs — déchargement et mise en main compris</i></span></label>
           </div>
         </div>
         <div class="quote" id="quoteBox" hidden></div>
@@ -170,6 +170,10 @@
             </div>
           </div>
         </div>
+        <div class="field">
+          <label for="wMsg">Commentaire</label>
+          <textarea id="wMsg" rows="4" placeholder="Ajoutez un détail utile : chantier, urgence, accès, hauteur, charge, marque souhaitée..."></textarea>
+        </div>
         <input type="text" id="wWebsite" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
         <div class="panel-actions">
           <button type="button" class="btn btn-line" data-prev>Retour</button>
@@ -183,12 +187,12 @@
         <div class="recap" id="recapBox"></div>
         <label class="check">
           <input type="checkbox" id="wCgl">
-          <span id="cglText">J'accepte les conditions générales de location et le dépôt d'une caution par empreinte bancaire.</span>
+          <span id="cglText">J'accepte d'être contacté sur WhatsApp pour finaliser ma demande.</span>
         </label>
         <p class="error" data-error="wCgl">Vous devez accepter les conditions pour confirmer.</p>
         <div class="panel-actions">
           <button type="button" class="btn btn-line" data-prev>Retour</button>
-          <button type="submit" class="btn btn-gold" id="wConfirmBtn">Confirmer la réservation</button>
+          <button type="submit" class="btn btn-gold" id="wConfirmBtn">Contacter sur WhatsApp</button>
         </div>
       </form>
 

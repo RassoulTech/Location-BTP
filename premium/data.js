@@ -1,6 +1,5 @@
 /* ==========================================================
    NDIOBEEN GUI LOGISTIQUE — parc de levage & manutention + illustrations produit
-   Leader sénégalais : location ET vente — tarifs location FCFA/jour · prix d'achat FCFA
    ========================================================== */
 
 // ---------- Illustrations SVG (duotone or/graphite) ----------
