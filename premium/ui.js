@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>
       <svg class="icon-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z"/></svg>
     </button>
-    <a class="nav-cta" href="https://wa.me/221782953780" target="_blank" rel="noopener" id="navCta">
+    <a class="nav-cta" href="https://wa.me/221782953780?text=Bonjour%2C%20Je%20souhaite%20obtenir%20des%20informations%20concernant%20vos%20mat%C3%A9riels%20et%20vos%20services.%20Merci%20d%27avance." target="_blank" rel="noopener" id="navCta">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
 +221 78 295 37 80
     </a>

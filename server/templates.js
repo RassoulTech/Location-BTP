@@ -212,7 +212,7 @@ function contactAckEmail(c) {
       ${h2(`Bien reçu, ${esc(c.name.split(" ")[0])}.`)}
       ${para("Votre message est entre les mains de notre conciergerie. Un interlocuteur dédié vous répond sous 2 heures ouvrées (lun–ven 7 h 30 – 18 h 30, sam 8 h – 13 h).")}
       ${box(row("Votre message", `<em style="color:${MUTED};">« ${esc(c.message)} »</em>`))}
-      ${para(`Urgence ? Contactez la conciergerie sur WhatsApp : <a href="https://wa.me/221782953780?text=${encodeURIComponent('👋 Bonjour, je vous contacte en urgence. Pouvez-vous répondre dès que possible, s\'il vous plaît ?') }" style="color:${GOLD_LIGHT};" target="_blank" rel="noopener">+221 78 295 37 80</a> — la conciergerie répond 24/7.`)}
+      ${para(`Urgence ? Contactez la conciergerie sur WhatsApp : <a href="https://wa.me/221782953780?text=${encodeURIComponent('Bonjour, je vous contacte en urgence. Pouvez-vous répondre dès que possible, s\'il vous plaît ?') }" style="color:${GOLD_LIGHT};" target="_blank" rel="noopener">+221 78 295 37 80</a> — la conciergerie répond 24/7.`)}
     `,
   });
 }
