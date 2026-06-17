@@ -26,33 +26,34 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Choose title and emoji per request type
     const templates = {
       "Location": {
-        emoji: "🚜",
-        intro: "Je souhaite obtenir des informations concernant la *location* du matériel suivant :",
+        intro: "Je souhaite vous contacter au sujet d'une demande de location.",
       },
       "Achat": {
-        emoji: "🛒",
-        intro: "Je souhaite obtenir des informations concernant l'*achat* du matériel suivant :",
+        intro: "Je souhaite vous contacter au sujet d'une demande d'achat.",
       },
       "Devis": {
-        emoji: "📄",
-        intro: "Je souhaite obtenir un devis pour le matériel suivant :",
+        intro: "Je souhaite obtenir un devis.",
       },
       "Information": {
-        emoji: "❓",
-        intro: "Je souhaite obtenir des informations générales :",
+        intro: "Je souhaite obtenir des informations.",
       },
     };
     const tpl = templates[requestType] || templates["Information"];
 
+    const fmtShort = d => {
+      try { return new Date(d + 'T00:00:00').toLocaleDateString('fr-FR'); } catch (_) { return d; }
+    };
+
     const lines = [];
-    lines.push("👋 Bonjour,");
+    lines.push("Bonjour,");
     lines.push("");
-    lines.push(`${tpl.intro}`);
+    lines.push(tpl.intro);
     lines.push("");
-    if (equipment) lines.push(`${tpl.emoji} Matériel : ${equipment}`);
-    if (qty) lines.push(`📦 Quantité souhaitée : ${qty}`);
-    if (start || end) lines.push(`📅 Période : ${start || "à préciser"} au ${end || "à préciser"}`);
-    if (delivery) lines.push(`📍 Lieu / Mise à dispo : ${delivery}`);
+    lines.push("Détails de la demande :");
+    if (equipment) lines.push(`• Matériel : ${equipment}`);
+    if (qty) lines.push(`• Quantité : ${qty}`);
+    if (start || end) lines.push(`• Période : du ${fmtShort(start || '')} au ${fmtShort(end || '')}`);
+    if (delivery) lines.push(`• Lieu de livraison ou d'utilisation : ${delivery}`);
 
     lines.push("");
     lines.push("Mes coordonnées :");
@@ -64,11 +65,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (comment) {
       lines.push("");
       lines.push("Message complémentaire :");
-      lines.push(comment);
+      lines.push(`• ${comment}`);
     }
 
     lines.push("");
-    lines.push("Je reste disponible pour échanger sur les modalités, la disponibilité et les conditions.");
+    lines.push("Merci de bien vouloir me recontacter afin que nous puissions échanger sur cette demande.");
+    lines.push("");
+    lines.push("Cordialement.");
 
     // Compact and encode without leaking URLs or internals
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join("\n"))}`;

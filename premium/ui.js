@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const href = navCta.getAttribute("href") || "";
       const m = href.match(/wa\.me\/(\d+)/);
       const number = m ? m[1] : "221782953780";
-      const message = `👋 Bonjour,\n\nJe vous contacte depuis votre site web et je souhaite obtenir des informations concernant vos matériels et vos services.\n\nPouvez-vous me renseigner sur les solutions disponibles et m'orienter selon mon besoin ?\n\nMerci d'avance pour votre retour.`;
+      const message = `Bonjour,\n\nJe souhaite vous contacter depuis votre site web afin d'obtenir des informations concernant vos matériels et vos services.\n\nPouvez-vous me renseigner sur les solutions disponibles et m'orienter selon mon besoin ?\n\nMerci d'avance pour votre retour.\n\nCordialement.`;
       const waUrl = `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
       navCta.setAttribute("href", waUrl);
       // open in new tab with noopener (already set) — nothing else needed

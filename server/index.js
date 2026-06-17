@@ -191,29 +191,20 @@ app.post("/api/bookings", rateLimit, async (req, res) => {
     const waNumber = "221782953780"; // numéro fourni
     const waBase = `https://wa.me/${waNumber}?text=`;
     // Build a natural, client-like WhatsApp message
-    const templates = {
-      sale: {
-        emoji: "🛒",
-        intro: "Je souhaite obtenir des informations concernant l'achat du matériel suivant :",
-      },
-      rent: {
-        emoji: "🚜",
-        intro: "Je souhaite obtenir des informations concernant la location du matériel suivant :",
-      },
+    const lines = [];
+    const fmtShort = d => {
+      try { return new Date(d + 'T00:00:00').toLocaleDateString('fr-FR'); } catch (_) { return d; }
     };
 
-    const lines = [];
-    lines.push("👋 Bonjour,");
+    lines.push("Bonjour,");
     lines.push("");
-    if (isSale) {
-      lines.push(templates.sale.intro);
-    } else {
-      lines.push(templates.rent.intro);
-    }
+    lines.push(isSale ? "Je souhaite vous contacter au sujet d'une demande d'achat." : "Je souhaite vous contacter au sujet d'une demande de location.");
     lines.push("");
-    lines.push(`${isSale ? templates.sale.emoji : templates.rent.emoji} Matériel : ${quote.name} × ${quote.qty}`);
-    if (!isSale && booking.start && booking.end) lines.push(`📅 Période : ${booking.start} au ${booking.end}`);
-    if (booking.address) lines.push(`📍 Lieu : ${booking.address}${booking.city ? `, ${booking.city}` : ""}`);
+    lines.push("Détails de la demande :");
+    lines.push(`• Matériel : ${quote.name} × ${quote.qty}`);
+    if (!isSale && booking.start && booking.end) lines.push(`• Période : du ${fmtShort(booking.start)} au ${fmtShort(booking.end)}`);
+    if (booking.address) lines.push(`• Lieu de livraison ou d'utilisation : ${booking.address}${booking.city ? `, ${booking.city}` : ""}`);
+
     lines.push("");
     lines.push("Mes coordonnées :");
     lines.push(`• Nom : ${booking.name}`);
@@ -224,11 +215,13 @@ app.post("/api/bookings", rateLimit, async (req, res) => {
     if (booking.message) {
       lines.push("");
       lines.push("Message complémentaire :");
-      lines.push(booking.message);
+      lines.push(`• ${booking.message}`);
     }
 
     lines.push("");
-    lines.push("Je reste disponible pour échanger sur les modalités, la disponibilité et les conditions.");
+    lines.push("Merci de bien vouloir me recontacter afin que nous puissions échanger sur cette demande.");
+    lines.push("");
+    lines.push("Cordialement.");
 
     const whatsappUrl = waBase + encodeURIComponent(lines.join("\n"));
 
@@ -264,8 +257,29 @@ app.post("/api/contact", rateLimit, async (req, res) => {
     // Préparer un lien WhatsApp pour la prise de contact (remplace l'envoi d'e-mails)
     const waNumber = "221782953780";
     const waBase = `https://wa.me/${waNumber}?text=`;
-    const msg = `Bonjour, je vous contacte depuis le site — ${c.name} : ${c.message}. Tél: ${c.phone}; E-mail: ${c.email}.`;
-    const whatsappUrl = waBase + encodeURIComponent(msg);
+
+    const lines = [];
+    lines.push("Bonjour,");
+    lines.push("");
+    lines.push("Je vous contacte depuis votre site web.");
+    lines.push("");
+    lines.push("Mes coordonnées :");
+    lines.push(`• Nom : ${c.name}`);
+    if (c.phone) lines.push(`• Téléphone : ${c.phone}`);
+    lines.push(`• E-mail : ${c.email}`);
+
+    if (c.message) {
+      lines.push("");
+      lines.push("Message complémentaire :");
+      lines.push(`• ${c.message}`);
+    }
+
+    lines.push("");
+    lines.push("Merci de bien vouloir me recontacter.");
+    lines.push("");
+    lines.push("Cordialement.");
+
+    const whatsappUrl = waBase + encodeURIComponent(lines.join("\n"));
 
     res.json({ ok: true, whatsappUrl });
   } catch (err) {

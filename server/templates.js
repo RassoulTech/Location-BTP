@@ -67,7 +67,7 @@ function layout({ title, preheader, bodyHtml }) {
       <tr><td align="center" style="padding:28px 16px 0;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.7;color:${MUTED};">
         NDIOBEEN GUI LOGISTIQUE — Location &amp; vente de matériel de levage<br>
         Zone industrielle SODIDA, Avenue Bourguiba, Dakar, Sénégal<br>
-        <a href="https://wa.me/221782953780?text=${encodeURIComponent('👋 Bonjour, je vous contacte depuis votre site web et je souhaite obtenir des informations concernant vos matériels et services. Pouvez-vous me renseigner ? Merci d\'avance.') }" style="color:${GOLD_LIGHT};text-decoration:none;" target="_blank" rel="noopener">+221 78 295 37 80</a> ·
+        <a href="https://wa.me/221782953780?text=${encodeURIComponent('Bonjour,\n\nJe souhaite obtenir des informations concernant vos matériels et vos services.\n\nPouvez-vous me renseigner sur les solutions disponibles et m\'orienter selon mon besoin ?\n\nMerci d\'avance.\n\nCordialement.') }" style="color:${GOLD_LIGHT};text-decoration:none;" target="_blank" rel="noopener">+221 78 295 37 80</a> ·
         Conciergerie 24/7<br><br>
         <span style="color:#6b6560;">Site de démonstration — cet e-mail a été généré automatiquement, merci de ne pas y répondre.</span>
       </td></tr>
@@ -146,7 +146,7 @@ function bookingClientEmail(b, q) {
         `)}
         ${box(quoteRows(q))}
         ${para(`Le montant ci-dessus est une estimation TTC. Le devis ferme — garantie, mise en service et formation opérateur en option — vous parviendra signé sous 24 h.`)}
-        ${para(`Une question ? Contactez-nous sur WhatsApp : <a href="https://wa.me/221782953780?text=${encodeURIComponent(`👋 Bonjour, je vous contacte au sujet de la demande ${b.ref} — ${q.name} × ${b.qty}. Pouvez-vous me confirmer la disponibilité et les prochaines étapes ?\n\nMerci.`)}" style="color:${GOLD_LIGHT};" target="_blank" rel="noopener">+221 78 295 37 80</a>.`)}
+        ${para(`Une question ? Contactez-nous sur WhatsApp : <a href="https://wa.me/221782953780?text=${encodeURIComponent(`Bonjour,\n\nJe vous contacte au sujet de la demande ${b.ref} — ${q.name} × ${b.qty}. Pouvez-vous me confirmer la disponibilité et les prochaines étapes ?\n\nMerci.\n\nCordialement.`)}" style="color:${GOLD_LIGHT};" target="_blank" rel="noopener">+221 78 295 37 80</a>.`)}
       `,
     });
   }
@@ -171,7 +171,7 @@ function bookingClientEmail(b, q) {
       `)}
       ${box(quoteRows(q))}
       ${para(`Présentez la référence <strong style="color:${GOLD_LIGHT};">${esc(b.ref)}</strong> avec une pièce d'identité (CNI ou passeport). Le règlement s'effectue à la remise du matériel — espèces, virement, Wave ou Orange Money.`)}
-      ${para(`Un imprévu ? La conciergerie répond 24/7 sur WhatsApp : <a href="https://wa.me/221782953780?text=${encodeURIComponent('👋 Bonjour, je vous contacte au sujet de ma réservation. Pouvez-vous m\'aider ? Merci d\'avance.') }" style="color:${GOLD_LIGHT};" target="_blank" rel="noopener">+221 78 295 37 80</a>.`)}
+      ${para(`Un imprévu ? La conciergerie répond 24/7 sur WhatsApp : <a href="https://wa.me/221782953780?text=${encodeURIComponent('Bonjour,\n\nJe vous contacte au sujet de ma réservation. Pouvez-vous m\'aider ?\n\nMerci d\'avance.\n\nCordialement.') }" style="color:${GOLD_LIGHT};" target="_blank" rel="noopener">+221 78 295 37 80</a>.`)}
     `,
   });
 }
