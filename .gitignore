@@ -1,0 +1,20 @@
+# Node modules
+node_modules/
+
+# npm artifacts
+package-lock.json
+npm-debug.log
+
+# Generated icon scripts
+generate-icons.js
+text-to-paths.js
+
+# Editor / OS
+.vscode/
+.DS_Store
+
+# Environment
+.env
+
+# Vercel
+.vercel
