@@ -190,34 +190,46 @@ app.post("/api/bookings", rateLimit, async (req, res) => {
     // Préparer le message WhatsApp de finalisation (remplace l'envoi d'e-mails)
     const waNumber = "221782953780"; // numéro fourni
     const waBase = `https://wa.me/${waNumber}?text=`;
-    // Build a formatted WhatsApp message (bold labels, emojis)
+    // Build a natural, client-like WhatsApp message
+    const templates = {
+      sale: {
+        emoji: "🛒",
+        intro: "Je souhaite obtenir des informations concernant l'achat du matériel suivant :",
+      },
+      rent: {
+        emoji: "🚜",
+        intro: "Je souhaite obtenir des informations concernant la location du matériel suivant :",
+      },
+    };
+
     const lines = [];
+    lines.push("👋 Bonjour,");
+    lines.push("");
     if (isSale) {
-      lines.push(`🛒 *Nouvelle demande d'achat*`);
-      lines.push("");
-      lines.push(`🚜 *Matériel* : ${quote.name} × ${quote.qty}`);
-      lines.push("");
-      lines.push(`👤 *Nom* : ${booking.name}`);
-      lines.push(`📱 *Tél* : ${booking.phone}`);
-      lines.push(`📧 *E-mail* : ${booking.email}`);
-      lines.push("");
-      lines.push(`📅 *Réf* : ${booking.ref}`);
-      lines.push("");
-      lines.push("Merci de me recontacter pour finaliser le devis.");
+      lines.push(templates.sale.intro);
     } else {
-      lines.push(`📋 *Nouvelle demande de location*`);
-      lines.push("");
-      lines.push(`🚜 *Matériel* : ${quote.name} × ${quote.qty}`);
-      lines.push(`🗓️ *Période* : ${booking.start} au ${booking.end}`);
-      lines.push("");
-      lines.push(`👤 *Nom* : ${booking.name}`);
-      lines.push(`📱 *Tél* : ${booking.phone}`);
-      lines.push(`📧 *E-mail* : ${booking.email}`);
-      lines.push("");
-      lines.push(`📅 *Réf* : ${booking.ref}`);
-      lines.push("");
-      lines.push("Merci de me recontacter pour finaliser la réservation.");
+      lines.push(templates.rent.intro);
     }
+    lines.push("");
+    lines.push(`${isSale ? templates.sale.emoji : templates.rent.emoji} Matériel : ${quote.name} × ${quote.qty}`);
+    if (!isSale && booking.start && booking.end) lines.push(`📅 Période : ${booking.start} au ${booking.end}`);
+    if (booking.address) lines.push(`📍 Lieu : ${booking.address}${booking.city ? `, ${booking.city}` : ""}`);
+    lines.push("");
+    lines.push("Mes coordonnées :");
+    lines.push(`• Nom : ${booking.name}`);
+    lines.push(`• Téléphone : ${booking.phone}`);
+    lines.push(`• E-mail : ${booking.email}`);
+    if (booking.company) lines.push(`• Entreprise : ${booking.company}`);
+
+    if (booking.message) {
+      lines.push("");
+      lines.push("Message complémentaire :");
+      lines.push(booking.message);
+    }
+
+    lines.push("");
+    lines.push("Je reste disponible pour échanger sur les modalités, la disponibilité et les conditions.");
+
     const whatsappUrl = waBase + encodeURIComponent(lines.join("\n"));
 
     // Enregistre la commande (journal + mémoire) une fois confirmée

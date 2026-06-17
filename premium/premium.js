@@ -24,37 +24,53 @@ document.addEventListener("DOMContentLoaded", async () => {
     delivery,
   } = {}) {
     // Choose title and emoji per request type
-    const titleMap = {
-      "Location": { emoji: "📋", label: "Nouvelle demande de location" },
-      "Achat": { emoji: "🛒", label: "Nouvelle demande d'achat" },
-      "Devis": { emoji: "📄", label: "Demande de devis" },
-      "Information": { emoji: "❓", label: "Demande d'information" },
+    const templates = {
+      "Location": {
+        emoji: "🚜",
+        intro: "Je souhaite obtenir des informations concernant la *location* du matériel suivant :",
+      },
+      "Achat": {
+        emoji: "🛒",
+        intro: "Je souhaite obtenir des informations concernant l'*achat* du matériel suivant :",
+      },
+      "Devis": {
+        emoji: "📄",
+        intro: "Je souhaite obtenir un devis pour le matériel suivant :",
+      },
+      "Information": {
+        emoji: "❓",
+        intro: "Je souhaite obtenir des informations générales :",
+      },
     };
-    const meta = titleMap[requestType] || titleMap["Information"];
+    const tpl = templates[requestType] || templates["Information"];
 
     const lines = [];
-    lines.push(`${meta.emoji} *${meta.label}*`);
+    lines.push("👋 Bonjour,");
     lines.push("");
-    if (equipment) lines.push(`🚜 *Matériel* : ${equipment}`);
-    if (qty) lines.push(`🔢 *Quantité* : ${qty}`);
-    if (start || end) lines.push(`🗓️ *Période* : ${start || "à préciser"} au ${end || "à préciser"}`);
-    if (delivery) lines.push(`📦 *Mise à dispo* : ${delivery}`);
-    if (image) {
-      const url = image.startsWith("http") ? image : `${location.origin}/${image.replace(/^\/+/, "")}`;
-      lines.push(`🖼️ *Photo* : ${url}`);
-    }
+    lines.push(`${tpl.intro}`);
     lines.push("");
-    if (name) lines.push(`👤 *Nom* : ${name}`);
-    if (company) lines.push(`🏢 *Entreprise* : ${company}`);
-    if (phone) lines.push(`📱 *Téléphone* : ${phone}`);
-    if (email) lines.push(`📧 *E-mail* : ${email}`);
-    if (comment) lines.push("", `📝 *Commentaire* :`, comment);
-    lines.push("");
-    lines.push(`📅 Date : ${new Date().toLocaleString('fr-FR')}`);
-    lines.push("");
-    lines.push("Merci de me recontacter afin que nous puissions finaliser cette demande.");
+    if (equipment) lines.push(`${tpl.emoji} Matériel : ${equipment}`);
+    if (qty) lines.push(`📦 Quantité souhaitée : ${qty}`);
+    if (start || end) lines.push(`📅 Période : ${start || "à préciser"} au ${end || "à préciser"}`);
+    if (delivery) lines.push(`📍 Lieu / Mise à dispo : ${delivery}`);
 
-    // Compact and encode
+    lines.push("");
+    lines.push("Mes coordonnées :");
+    if (name) lines.push(`• Nom : ${name}`);
+    if (phone) lines.push(`• Téléphone : ${phone}`);
+    if (email) lines.push(`• E-mail : ${email}`);
+    if (company) lines.push(`• Entreprise : ${company}`);
+
+    if (comment) {
+      lines.push("");
+      lines.push("Message complémentaire :");
+      lines.push(comment);
+    }
+
+    lines.push("");
+    lines.push("Je reste disponible pour échanger sur les modalités, la disponibilité et les conditions.");
+
+    // Compact and encode without leaking URLs or internals
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join("\n"))}`;
   }
 
