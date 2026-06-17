@@ -262,7 +262,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   function cardHTML(e, i = 0, mode = "location") {
     const sale = mode === "vente";
     const intent = sale ? "Achat sur demande" : "Location sur demande";
-    const cta = sale ? "Acheter ce matériel" : "Louer ce matériel";
+    const cta = sale ? "Demander un devis" : "Demander une location";
     const aria = sale
       ? `Demander des informations d'achat pour ${e.name}`
       : `Demander des informations de location pour ${e.name}`;
@@ -275,14 +275,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       <div class="card-top">
         <span class="card-cat">${e.cat}</span>
       </div>
-      <h3>${e.name}</h3>
+      <h3 class="card-title">${e.name}</h3>
       <p class="card-spec">${e.spec}</p>
       <div class="card-foot">
         <div class="request-wrap">
           <span class="request-kicker">${intent}</span>
           <span class="request-copy">Un conseiller confirme les conditions sur WhatsApp.</span>
         </div>
-        <span class="btn btn-line">${cta}</span>
+        <button class="btn btn-gold card-cta" type="button" aria-label="${cta}">${cta}</button>
       </div>
     </article>`;
   }
