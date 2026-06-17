@@ -23,26 +23,38 @@ document.addEventListener("DOMContentLoaded", async () => {
     end,
     delivery,
   } = {}) {
-    const lines = [
-      "Bonjour,",
-      "",
-      `Type de demande : ${requestType}`,
-    ];
-    if (equipment) lines.push(`Matériel : ${equipment}`);
+    // Choose title and emoji per request type
+    const titleMap = {
+      "Location": { emoji: "📋", label: "Nouvelle demande de location" },
+      "Achat": { emoji: "🛒", label: "Nouvelle demande d'achat" },
+      "Devis": { emoji: "📄", label: "Demande de devis" },
+      "Information": { emoji: "❓", label: "Demande d'information" },
+    };
+    const meta = titleMap[requestType] || titleMap["Information"];
+
+    const lines = [];
+    lines.push(`${meta.emoji} *${meta.label}*`);
+    lines.push("");
+    if (equipment) lines.push(`🚜 *Matériel* : ${equipment}`);
+    if (qty) lines.push(`🔢 *Quantité* : ${qty}`);
+    if (start || end) lines.push(`🗓️ *Période* : ${start || "à préciser"} au ${end || "à préciser"}`);
+    if (delivery) lines.push(`📦 *Mise à dispo* : ${delivery}`);
     if (image) {
       const url = image.startsWith("http") ? image : `${location.origin}/${image.replace(/^\/+/, "")}`;
-      lines.push(`Photo du matériel : ${url}`);
+      lines.push(`🖼️ *Photo* : ${url}`);
     }
-    if (qty) lines.push(`Quantité souhaitée : ${qty}`);
-    if (start || end) lines.push(`Période souhaitée : ${start || "à préciser"} au ${end || "à préciser"}`);
-    if (delivery) lines.push(`Mise à disposition : ${delivery}`);
     lines.push("");
-    if (name) lines.push(`Nom : ${name}`);
-    if (company) lines.push(`Entreprise : ${company}`);
-    if (phone) lines.push(`Téléphone : ${phone}`);
-    if (email) lines.push(`E-mail : ${email}`);
-    if (comment) lines.push("", "Commentaire :", comment);
-    lines.push("", "Merci de me recontacter afin que nous puissions échanger sur cette demande.");
+    if (name) lines.push(`👤 *Nom* : ${name}`);
+    if (company) lines.push(`🏢 *Entreprise* : ${company}`);
+    if (phone) lines.push(`📱 *Téléphone* : ${phone}`);
+    if (email) lines.push(`📧 *E-mail* : ${email}`);
+    if (comment) lines.push("", `📝 *Commentaire* :`, comment);
+    lines.push("");
+    lines.push(`📅 Date : ${new Date().toLocaleString('fr-FR')}`);
+    lines.push("");
+    lines.push("Merci de me recontacter afin que nous puissions finaliser cette demande.");
+
+    // Compact and encode
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join("\n"))}`;
   }
 

@@ -190,10 +190,35 @@ app.post("/api/bookings", rateLimit, async (req, res) => {
     // Préparer le message WhatsApp de finalisation (remplace l'envoi d'e-mails)
     const waNumber = "221782953780"; // numéro fourni
     const waBase = `https://wa.me/${waNumber}?text=`;
-    const msg = isSale
-      ? `Bonjour, je souhaite finaliser mon devis d\'achat ${booking.ref} — ${quote.name} × ${quote.qty}. Nom: ${booking.name}; Tél: ${booking.phone}; E-mail: ${booking.email}.`
-      : `Bonjour, je souhaite finaliser ma réservation ${booking.ref} — ${quote.name} × ${quote.qty} du ${booking.start} au ${booking.end}. Nom: ${booking.name}; Tél: ${booking.phone}; E-mail: ${booking.email}.`;
-    const whatsappUrl = waBase + encodeURIComponent(msg);
+    // Build a formatted WhatsApp message (bold labels, emojis)
+    const lines = [];
+    if (isSale) {
+      lines.push(`🛒 *Nouvelle demande d'achat*`);
+      lines.push("");
+      lines.push(`🚜 *Matériel* : ${quote.name} × ${quote.qty}`);
+      lines.push("");
+      lines.push(`👤 *Nom* : ${booking.name}`);
+      lines.push(`📱 *Tél* : ${booking.phone}`);
+      lines.push(`📧 *E-mail* : ${booking.email}`);
+      lines.push("");
+      lines.push(`📅 *Réf* : ${booking.ref}`);
+      lines.push("");
+      lines.push("Merci de me recontacter pour finaliser le devis.");
+    } else {
+      lines.push(`📋 *Nouvelle demande de location*`);
+      lines.push("");
+      lines.push(`🚜 *Matériel* : ${quote.name} × ${quote.qty}`);
+      lines.push(`🗓️ *Période* : ${booking.start} au ${booking.end}`);
+      lines.push("");
+      lines.push(`👤 *Nom* : ${booking.name}`);
+      lines.push(`📱 *Tél* : ${booking.phone}`);
+      lines.push(`📧 *E-mail* : ${booking.email}`);
+      lines.push("");
+      lines.push(`📅 *Réf* : ${booking.ref}`);
+      lines.push("");
+      lines.push("Merci de me recontacter pour finaliser la réservation.");
+    }
+    const whatsappUrl = waBase + encodeURIComponent(lines.join("\n"));
 
     // Enregistre la commande (journal + mémoire) une fois confirmée
     const record = { ...booking, totalTTC: quote.ttc };
