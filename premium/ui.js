@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>
       <svg class="icon-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z"/></svg>
     </button>
-    <a class="nav-cta" href="https://wa.me/221782953780" target="_blank" rel="noopener">
+    <a class="nav-cta" href="https://wa.me/221782953780" target="_blank" rel="noopener" id="navCta">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
 +221 78 295 37 80
     </a>
@@ -104,6 +104,20 @@ document.addEventListener("DOMContentLoaded", () => {
     document.documentElement.dataset.theme = next;
     localStorage.setItem("ndiobeen-theme", next);
   });
+
+  // Attach prefilled WhatsApp message to the header contact CTA (prevent empty chat)
+  const navCta = document.getElementById("navCta");
+  if (navCta) {
+    try {
+      const href = navCta.getAttribute("href") || "";
+      const m = href.match(/wa\.me\/(\d+)/);
+      const number = m ? m[1] : "221782953780";
+      const message = `👋 Bonjour,\n\nJe vous contacte depuis votre site web et je souhaite obtenir des informations concernant vos matériels et vos services.\n\nPouvez-vous me renseigner sur les solutions disponibles et m'orienter selon mon besoin ?\n\nMerci d'avance pour votre retour.`;
+      const waUrl = `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
+      navCta.setAttribute("href", waUrl);
+      // open in new tab with noopener (already set) — nothing else needed
+    } catch (e) { /* fail silently */ }
+  }
 
   // ---------- Navigation : scroll + burger ----------
   const navShell = document.getElementById("navShell");
