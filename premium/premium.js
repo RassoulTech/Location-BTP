@@ -787,53 +787,80 @@ document.addEventListener("DOMContentLoaded", async () => {
       try {
         const q = getQuote();
         if (!q) throw new Error("Complétez les informations de votre demande.");
+
+        // Run step validators to ensure client-side correctness
+        if (typeof validators === "object") {
+          if (!validators[1]() || !validators[2]() || !validators[3]() || !validators[4]()) {
+            throw new Error("Corrigez les erreurs du formulaire avant de poursuivre.");
+          }
+        }
+
         const deliveryValue = document.querySelector("[name=wDelivery]:checked").value;
-        const payload = {
-          mode: wMode,
-          equip: wEquip.value,
+        const delivery = deliveryValue === "livraison"
+          ? `Livraison souhaitee${wAddress.value.trim() || wCity.value.trim() ? " : " + [wAddress.value.trim(), wCity.value.trim()].filter(Boolean).join(", ") : ""}`
+          : "Retrait en agence";
+
+        // Build WhatsApp URL locally to avoid dependency on server
+        const url = whatsappUrl({
+          equipment: q.e.name,
+          image: q.e.img,
+          requestType: sale ? "Achat" : "Location",
+          name: wName.value.trim(),
+          company: $("#wCompany").value.trim(),
+          phone: phone.e164(),
+          email: wEmail.value.trim(),
+          comment: wMsg?.value.trim(),
           qty: q.qty,
           start: sale ? "" : wStart.value,
           end: sale ? "" : wEnd.value,
-          delivery: deliveryValue === "livraison" ? "livraison" : "retrait",
-          clientType: $("#wClientType") ? $("#wClientType").value : "pro",
-          name: wName.value.trim(),
-          company: $("#wCompany").value.trim(),
-          email: wEmail.value.trim(),
-          phone: phone.e164(),
-          address: wAddress.value.trim(),
-          city: wCity.value.trim(),
-          message: wMsg?.value.trim(),
-        };
-
-        // Appel serveur pour validation stricte et génération du message WhatsApp
-        const res = await fetch("/api/bookings", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
+          delivery,
         });
-        const data = await res.json().catch(() => ({ ok: false, error: "Réponse invalide du serveur." }));
-        if (!res.ok || !data.ok) throw new Error(data?.error || "La validation serveur a échoué.");
 
-        const ref = data.ref || ("WA-" + Date.now().toString(36).toUpperCase());
-
+        const ref = "WA-" + Date.now().toString(36).toUpperCase();
         try {
           const all = JSON.parse(localStorage.getItem("ndiobeen-bookings") || "[]");
           all.push({ ref, mode: wMode, equip: wEquip.value, createdAt: new Date().toISOString() });
           localStorage.setItem("ndiobeen-bookings", JSON.stringify(all));
         } catch (_) { /* stockage local indisponible : sans incidence */ }
 
-        // Mise à jour UI après validation serveur
+        // Update UI and open WhatsApp immediately
         if (successOverline) successOverline.textContent = sale ? "Demande d'achat prête" : "Demande de location prête";
         $("#successRef").textContent = "Conversation WhatsApp";
         $("#successMsg").textContent = sale
-          ? `Merci ${wName.value.trim().split(" ")[0]}. Votre message d'achat a été validé et est prêt.`
-          : `Merci ${wName.value.trim().split(" ")[0]}. Votre message de location a été validé et est prêt.`;
+          ? `Merci ${wName.value.trim().split(" ")[0]}. Votre message d'achat est prêt.`
+          : `Merci ${wName.value.trim().split(" ")[0]}. Votre message de location est prêt.`;
         const demo = $("#successDemo");
         demo.hidden = false;
-        demo.innerHTML = `<a class="btn btn-gold" href="${data.whatsappUrl}" target="_blank" rel="noopener">Ouvrir WhatsApp</a>`;
+        demo.innerHTML = `<a class="btn btn-gold" href="${url}" target="_blank" rel="noopener">Ouvrir WhatsApp</a>`;
         goToStep(5);
-        // Ouvrir WhatsApp uniquement après validation serveur
-        openWhatsApp(data.whatsappUrl);
+        openWhatsApp(url);
+
+        // Fire-and-forget: send booking to server for record without blocking user flow
+        try {
+          const logPayload = {
+            mode: wMode,
+            equip: wEquip.value,
+            qty: q.qty,
+            start: sale ? "" : wStart.value,
+            end: sale ? "" : wEnd.value,
+            delivery: deliveryValue === "livraison" ? "livraison" : "retrait",
+            name: wName.value.trim(),
+            company: $("#wCompany").value.trim(),
+            email: wEmail.value.trim(),
+            phone: phone.e164(),
+            address: wAddress.value.trim(),
+            city: wCity.value.trim(),
+            message: wMsg?.value.trim(),
+            ref,
+          };
+          if (navigator.sendBeacon) {
+            const blob = new Blob([JSON.stringify(logPayload)], { type: "application/json" });
+            navigator.sendBeacon("/api/bookings", blob);
+          } else {
+            fetch("/api/bookings", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(logPayload), keepalive: true }).catch(() => { });
+          }
+        } catch (_) { /* ignore logging errors */ }
+
       } catch (err) {
         toast(err.message || "Erreur lors de la validation.", "err");
       } finally {
@@ -881,29 +908,41 @@ document.addEventListener("DOMContentLoaded", async () => {
       setLoading(btn, true);
       isContactSubmitting = true;
       try {
-        const payload = {
+        // Build WhatsApp URL locally and open it immediately after client validation
+        const url = whatsappUrl({
+          equipment: "Demande generale",
+          requestType: "Information",
           name: cName.value.trim(),
-          email: cEmail.value.trim(),
           phone: phone && cPhone.value.trim() ? phone.e164() : "",
-          message: cMsg.value.trim(),
-        };
-        const res = await fetch("/api/contact", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
+          email: cEmail.value.trim(),
+          comment: cMsg.value.trim(),
         });
-        const data = await res.json().catch(() => ({ ok: false, error: "Réponse invalide du serveur." }));
-        if (!res.ok || !data.ok) throw new Error(data?.error || "La validation serveur a échoué.");
 
-        const url = data.whatsappUrl;
         const ok = $("#contactOk");
         ok.hidden = false;
         ok.innerHTML = `Message prêt — WhatsApp va s'ouvrir avec votre demande : <a class="btn btn-gold" href="${url}" target="_blank" rel="noopener">Ouvrir WhatsApp</a>`;
-        // Ouvrir WhatsApp uniquement après validation serveur
+        // Open WhatsApp immediately — no blocking server call
         openWhatsApp(url);
         contactForm.reset();
         contactForm.querySelectorAll(".field").forEach(f => f.classList.remove("has-ok", "has-error"));
         toast("Votre message WhatsApp est prêt.", "ok");
+
+        // Fire-and-forget: send contact to server for records/notifications
+        try {
+          const contactPayload = {
+            name: cName.value.trim(),
+            email: cEmail.value.trim(),
+            phone: phone && cPhone.value.trim() ? phone.e164() : "",
+            message: cMsg.value.trim(),
+          };
+          if (navigator.sendBeacon) {
+            const blob = new Blob([JSON.stringify(contactPayload)], { type: "application/json" });
+            navigator.sendBeacon("/api/contact", blob);
+          } else {
+            fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(contactPayload), keepalive: true }).catch(() => { });
+          }
+        } catch (_) { /* ignore background logging errors */ }
+
       } catch (err) {
         toast(err.message || "Erreur lors de l'envoi", "err");
       } finally {
