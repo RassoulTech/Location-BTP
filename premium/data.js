@@ -180,6 +180,7 @@ const EQUIPMENTS = [
   { id: "chargeuse",            name: "Chargeuse sur pneus",   cat: "Chargeuses",  price: 160000, sale: 64000000,  caution: 1800000, sectors: ["BTP","Terrassement"], spec: "Chargeuse sur pneus pour chargement et déplacement de matériaux",      img: "img/chargeuse.png",            art: "telehandler", stock: 3 },
   { id: "tractopelle",          name: "Tractopelle",           cat: "Tractopelles",price: 150000, sale: 58000000,  caution: 1700000, sectors: ["BTP","Travaux"],      spec: "Tractopelle polyvalent pour terrassement et rétro",                    img: "img/tractopelle.png",          art: "boom",        stock: 3 },
   { id: "bulldozer",            name: "Bulldozer",             cat: "Bulldozers",  price: 240000, sale: 120000000, caution: 3000000, sectors: ["BTP","Terrassement"], spec: "Bulldozer pour terrassement, nivellement et poussée de matériaux",     img: "img/bulldozer.png",            art: "shopCrane",   stock: 3 },
+  { id: "camion-benne",         name: "Camion benne",          cat: "Camions",     price: 120000, sale: 35000000,  caution: 1000000, sectors: ["BTP","Logistique"],   spec: "Camion benne robuste pour transport et déchargement de matériaux",     img: "img/camion.png",               art: "telehandler", stock: 3 },
 ];
 
 const CATEGORIES = ["Tout", ...new Set(EQUIPMENTS.map(e => e.cat))];

@@ -28,6 +28,7 @@ const CATALOG = {
   "chargeuse":         { name: "Chargeuse sur pneus",   price: 160000, sale: 64000000,  caution: 1800000, stock: 3 },
   "tractopelle":       { name: "Tractopelle",          price: 150000, sale: 58000000,  caution: 1700000, stock: 3 },
   "bulldozer":         { name: "Bulldozer",            price: 240000, sale: 120000000, caution: 3000000, stock: 3 },
+  "camion-benne":      { name: "Camion benne",          price: 120000, sale: 35000000,  caution: 1000000, stock: 3 },
 };
 const DELIVERY_COST = 40000;
 const TVA_RATE = 0.18;
