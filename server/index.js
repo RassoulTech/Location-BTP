@@ -296,9 +296,8 @@ app.get("/api/stock", (req, res) => res.json(availabilityMap()));
 const SITE_DIR = path.join(__dirname, "..", "premium");
 // Serve root-level icons (favicon and logo) so requests to /favicon.ico and /logo-512.png succeed
 app.get('/favicon.ico', (req, res) => {
-  // Serve the app logo PNG as the canonical favicon and disable aggressive caching so clients refresh it
   res.set({ 'Cache-Control': 'no-cache, no-store, must-revalidate' });
-  return res.sendFile(path.join(__dirname, '..', 'logo-512.png'));
+  return res.sendFile(path.join(__dirname, '..', 'premium', 'img', 'icone.png'));
 });
 app.get('/logo-512.png', (req, res) => res.sendFile(path.join(__dirname, '..', 'logo-512.png')));
 
