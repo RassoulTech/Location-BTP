@@ -294,6 +294,10 @@ app.get("/api/stock", (req, res) => res.json(availabilityMap()));
 
 /* ---------- Site statique ---------- */
 const SITE_DIR = path.join(__dirname, "..", "premium");
+// Serve root-level icons (favicon and logo) so requests to /favicon.ico and /logo-512.png succeed
+app.get('/favicon.ico', (req, res) => res.sendFile(path.join(__dirname, '..', 'favicon.ico')));
+app.get('/logo-512.png', (req, res) => res.sendFile(path.join(__dirname, '..', 'logo-512.png')));
+
 app.use(express.static(SITE_DIR, { extensions: ["html"] }));
 
 app.listen(PORT, () => {
