@@ -25,7 +25,7 @@ export default async function ContactPage() {
         eyebrow="Contact"
         title="Nous joindre"
         description="Une demande de location ou d'achat se fait depuis votre espace client. Pour tout le reste, voici nos coordonnees."
-        actions={<ButtonLink href="/materiels" tone="primary">Voir le parc</ButtonLink>}
+        actions={<ButtonLink href="/materiels" tone="gold">Voir le parc</ButtonLink>}
       />
 
       <Panel title="Coordonnees">

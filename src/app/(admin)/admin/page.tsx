@@ -73,7 +73,7 @@ export default async function AdminDashboard() {
         eyebrow="Administration"
         title="Vue d'ensemble"
         description="Tous les chiffres ci-dessous sont lus dans la base. Aucune valeur de demonstration."
-        actions={<ButtonLink href="/admin/locations" tone="primary">Voir les locations</ButtonLink>}
+        actions={<ButtonLink href="/admin/locations" tone="gold">Voir les locations</ButtonLink>}
       />
 
       <StatGrid>

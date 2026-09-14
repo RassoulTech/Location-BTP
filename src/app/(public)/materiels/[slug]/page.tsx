@@ -196,7 +196,7 @@ export default async function EquipmentPage({
                 est alors reserve immediatement, en attente de validation.
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
-                <ButtonLink href={`/connexion?suite=/materiels/${type.slug}`} tone="primary">
+                <ButtonLink href={`/connexion?suite=/materiels/${type.slug}`} tone="gold">
                   Se connecter
                 </ButtonLink>
                 <ButtonLink href="/inscription">Creer un compte</ButtonLink>

@@ -3,6 +3,7 @@ import { requireUserPage, isStaff } from "@/lib/auth/guard";
 import { logoutAction } from "@/lib/actions/auth";
 import { NavList } from "@/components/nav";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Brand } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -17,37 +18,31 @@ export default async function ClientLayout({ children }: { children: React.React
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="border-b border-rule">
-        <div className="mx-auto flex max-w-5xl items-center gap-3 px-5 py-3">
-          <Link href="/" className="mr-auto flex items-center gap-2.5">
-            <span className="flex h-8 w-8 items-center justify-center bg-ink text-[15px] font-bold text-paper">B</span>
-            <span className="text-[13.5px] font-bold uppercase tracking-[0.06em] text-ink">
-              Espace client
-            </span>
-          </Link>
-          <span className="hidden text-[13px] text-ink-3 sm:inline">
+      <header className="border-b border-hairline">
+        <div className="mx-auto flex max-w-[1100px] items-center gap-4 px-4 py-4 sm:px-6">
+          <Link href="/" className="mr-auto"><Brand /></Link>
+          <span className="hidden font-mono text-[0.72rem] uppercase tracking-[0.14em] text-soft md:inline">
             {user.firstName} {user.lastName}
           </span>
           <ThemeToggle />
           {isStaff(user) && (
             <Link href="/admin"
-                  className="border border-rule-firm px-3 py-2 text-[13px] font-semibold text-ink hover:bg-surface-2">
+                  className="hidden rounded-full border border-hairline px-4 py-2 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted transition-colors hover:border-gold hover:text-gold-2 sm:inline-block">
               Administration
             </Link>
           )}
           <form action={logoutAction}>
             <button type="submit"
-                    className="border border-rule-firm px-3 py-2 text-[13px] font-semibold text-ink-2 hover:bg-surface-2">
-              Deconnexion
+                    className="rounded-full border border-hairline px-4 py-2 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted transition-colors hover:border-err hover:text-err">
+              Déconnexion
             </button>
           </form>
         </div>
-        <div className="mx-auto max-w-5xl px-4">
+        <div className="mx-auto max-w-[1100px] px-3 sm:px-5">
           <NavList items={ITEMS} orientation="horizontal" />
         </div>
       </header>
-
-      <main className="mx-auto w-full max-w-5xl flex-1 px-5 py-8">{children}</main>
+      <main className="mx-auto w-full max-w-[1100px] flex-1 px-4 py-10 sm:px-6">{children}</main>
     </div>
   );
 }

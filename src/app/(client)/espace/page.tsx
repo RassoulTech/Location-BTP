@@ -55,7 +55,7 @@ export default async function ClientDashboard() {
         eyebrow={`Client ${customer.reference}`}
         title={`Bonjour ${user.firstName}`}
         description="Vos demandes, leur statut et ce qui vous attend."
-        actions={<ButtonLink href="/materiels" tone="primary">Louer du materiel</ButtonLink>}
+        actions={<ButtonLink href="/materiels" tone="gold">Louer du materiel</ButtonLink>}
       />
 
       <StatGrid>

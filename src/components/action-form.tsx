@@ -14,9 +14,9 @@ import type { ActionState } from "@/lib/actions/state";
    `state.errors` et lues par le parent.
    ========================================================== */
 
-export function SubmitButton({ children, tone = "primary" }: {
+export function SubmitButton({ children, tone = "gold" }: {
   children: ReactNode;
-  tone?: "primary" | "default" | "danger";
+  tone?: "gold" | "line" | "danger";
 }) {
   const { pending } = useFormStatus();
   return (

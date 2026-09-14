@@ -53,7 +53,7 @@ export default async function ClientRentalsPage() {
         eyebrow="Espace client"
         title="Mes locations"
         description="Chaque demande, son statut et les exemplaires qui vous sont affectes."
-        actions={<ButtonLink href="/materiels" tone="primary">Nouvelle demande</ButtonLink>}
+        actions={<ButtonLink href="/materiels" tone="gold">Nouvelle demande</ButtonLink>}
       />
 
       {rows.length === 0 ? (

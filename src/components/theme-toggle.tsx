@@ -2,40 +2,40 @@
 
 import { useEffect, useState } from "react";
 
-/** Bascule clair / sombre, memorisee dans le navigateur. */
+/** Bascule clair / sombre. Sombre par défaut, comme le site. */
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<"light" | "dark" | null>(null);
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
 
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem("btp-theme");
-      if (saved === "light" || saved === "dark") {
-        setTheme(saved);
-        document.documentElement.dataset.theme = saved;
-      }
-    } catch { /* stockage indisponible : on reste sur le theme systeme */ }
+    const current = document.documentElement.dataset.theme;
+    if (current === "light" || current === "dark") setTheme(current);
   }, []);
 
   const toggle = () => {
-    const current =
-      theme ??
-      (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-    const next = current === "dark" ? "light" : "dark";
+    const next = theme === "dark" ? "light" : "dark";
     setTheme(next);
     document.documentElement.dataset.theme = next;
-    try { localStorage.setItem("btp-theme", next); } catch { /* sans incidence */ }
+    try { localStorage.setItem("ndiobeen-theme", next); } catch { /* sans incidence */ }
   };
 
   return (
     <button
       type="button"
       onClick={toggle}
-      aria-label="Changer de theme"
-      className="inline-flex h-9 w-9 items-center justify-center border border-rule text-ink-2 hover:bg-surface-2"
+      aria-label={theme === "dark" ? "Passer au thème clair" : "Passer au thème sombre"}
+      className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-hairline text-muted transition-colors hover:border-gold hover:text-gold-2"
     >
-      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden>
-        <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z" />
-      </svg>
+      {theme === "dark" ? (
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+             strokeWidth="1.6" strokeLinecap="round" aria-hidden>
+          <circle cx="12" cy="12" r="4.5" />
+          <path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2" />
+        </svg>
+      ) : (
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden>
+          <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z" />
+        </svg>
+      )}
     </button>
   );
 }

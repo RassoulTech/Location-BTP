@@ -83,7 +83,7 @@ export default async function MaintenancePage() {
                               <ActionForm key={to} action={setMaintenanceStatusAction}
                                           hidden={{ id: record.id, status: to }}
                                           className="contents">
-                                <SubmitButton tone={to === "cancelled" ? "danger" : "default"}>
+                                <SubmitButton tone={to === "cancelled" ? "danger" : "line"}>
                                   {NEXT_LABEL[to] ?? to}
                                 </SubmitButton>
                               </ActionForm>
