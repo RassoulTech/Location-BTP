@@ -1,0 +1,121 @@
+/* ==========================================================
+   Acces au compte dans la barre du site.
+
+   Ce fichier est le SEUL ajout de style au site existant.
+   `premium.css` n'est pas modifie. Aucune couleur, aucune
+   police, aucun rayon nouveau : tout vient des variables deja
+   definies par la charte.
+
+   Il est injecte par `ui.js`, ce qui evite de toucher aux cinq
+   pages HTML.
+   ========================================================== */
+
+.nav-account {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.15rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--gold-grad);
+  color: #14100a;
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 10px 26px rgba(202, 138, 4, 0.22);
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+.nav-account:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 34px rgba(202, 138, 4, 0.3);
+}
+.nav-account svg {
+  width: 15px; height: 15px;
+  fill: none; stroke: #14100a; stroke-width: 1.8; stroke-linecap: round;
+}
+
+/* Acces secondaire (administration) : discret, a cote du premier. */
+.nav-account.is-ghost {
+  display: none;
+  background: none;
+  border: 1px solid var(--hairline);
+  color: var(--muted);
+  box-shadow: none;
+}
+.nav-account.is-ghost svg { stroke: var(--gold); }
+.nav-account.is-ghost:hover {
+  border-color: var(--gold); color: var(--gold-2); transform: none;
+}
+@media (min-width: 1021px) { .nav-account.is-ghost { display: inline-flex; } }
+
+/* ==========================================================
+   Faire de la place dans la barre.
+
+   Mesure faite sur le site d'origine : la barre est pleine a
+   1 pixel pres a toutes les largeurs de bureau, et elle
+   DEBORDAIT deja entre 900 et 1120 px, avant toute modification
+   de notre part. On ne retire donc rien — on corrige.
+
+   Trois reglages, aucun sur `premium.css` :
+   ========================================================== */
+
+@media (min-width: 1021px) {
+  /* 1. La barre peut respirer au-dela de la largeur du contenu.
+        Visuellement imperceptible, +140 px de place utile. */
+  .nav-shell {
+    width: min(1320px, calc(100% - 32px));
+    gap: 1.2rem;
+  }
+}
+
+/* 2. La navigation horizontale ne s'ouvre qu'a partir de 1021 px.
+      Entre 821 et 1020 px, la marque et les cinq liens ne tenaient
+      deja pas : la barre debordait avant toute modification. On
+      garde donc le menu deroulant un cran plus longtemps. */
+@media (min-width: 821px) and (max-width: 1020px) {
+  .nav-burger { display: block; }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 1rem 1.2rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--hairline);
+    background: var(--nav-bg-2);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+  .nav-links.is-open { display: flex; }
+  .nav-links a { padding: 0.75rem 0.4rem; }
+}
+
+/* 3. La ligne directe n'apparait qu'a partir du moment ou la
+      barre peut vraiment l'accueillir. */
+@media (max-width: 1199px) {
+  .nav-cta { display: none !important; }
+}
+
+/* 4. Le libelle du bouton n'apparait que lorsqu'il y a la place ;
+      en dessous, l'icone seule, qui ne deborde jamais. */
+.nav-account .nav-account-label { display: none; }
+.nav-account { padding: 0.6rem 0.8rem; }
+
+@media (min-width: 1400px) {
+  .nav-account { padding: 0.6rem 1.15rem; }
+  .nav-account .nav-account-label { display: inline; }
+}
+
+/* En menu deroulant, la barre est degagee : le libelle revient. */
+@media (min-width: 700px) and (max-width: 1020px) {
+  .nav-account { padding: 0.6rem 1.15rem; }
+  .nav-account .nav-account-label { display: inline; }
+}

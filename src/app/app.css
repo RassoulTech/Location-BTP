@@ -1,0 +1,173 @@
+/* ==========================================================
+   Espaces prives — additions a la charte du site.
+
+   `premium.css` est servi tel quel depuis `public/` et n'est
+   jamais modifie. Ce fichier ne contient que ce que le site
+   statique n'avait pas : l'acces au compte dans la barre, et
+   les gabarits des ecrans prives.
+
+   Regle : aucune couleur, aucune police, aucun rayon nouveau.
+   Tout provient des variables deja definies par la charte.
+   ========================================================== */
+
+/* La charte ne definit pas de teinte « information ». */
+html[data-theme="dark"]  { --info: #9ec5e8; }
+html[data-theme="light"] { --info: #1d4ed8; }
+
+/* ---------- Acces au compte, dans la barre du site ---------- */
+.nav-account {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.15rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--gold-grad);
+  color: #14100a;
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 10px 26px rgba(202, 138, 4, 0.22);
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+.nav-account:hover { transform: translateY(-2px); box-shadow: 0 16px 34px rgba(202, 138, 4, 0.3); }
+.nav-account svg { width: 15px; height: 15px; fill: none; stroke: #14100a; stroke-width: 1.8; stroke-linecap: round; }
+
+.nav-account.is-ghost {
+  background: none;
+  border: 1px solid var(--hairline);
+  color: var(--muted);
+  box-shadow: none;
+}
+.nav-account.is-ghost svg { stroke: var(--gold); }
+.nav-account.is-ghost:hover { border-color: var(--gold); color: var(--gold-2); transform: none; }
+
+@media (max-width: 519px) {
+  .nav-account { padding: 0.6rem 0.75rem; }
+  .nav-account .nav-account-label { display: none; }
+}
+.nav-account.is-ghost { display: none; }
+@media (min-width: 1021px) { .nav-account.is-ghost { display: inline-flex; } }
+
+.nav-context {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  padding-left: 1rem;
+  border-left: 1px solid var(--hairline);
+  white-space: nowrap;
+}
+.nav-logout {
+  background: none;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  padding: 0.55rem 1.1rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.3s, color 0.3s;
+}
+.nav-logout:hover { border-color: var(--err); color: var(--err); }
+
+/* `premium.css` liste les types de champs qu'il habille, et le
+   site d'origine n'ayant aucun mot de passe, `password` n'y
+   figure pas. On l'aligne sur les autres plutot que de toucher
+   a la charte. */
+input[type="password"] {
+  width: 100%;
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  color: var(--text);
+  background: var(--input-bg);
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  transition: border-color 0.3s, background-color 0.3s;
+}
+input[type="password"]:focus {
+  border-color: var(--gold); background: var(--input-bg-2); outline: none;
+}
+
+/* ---------- Ecran centre : connexion, inscription ---------- */
+/* Flex + `margin: auto` plutot que `place-items: center` : une
+   carte plus haute que l'ecran deborderait vers le haut et se
+   ferait rogner par la barre. */
+.auth-shell {
+  min-height: 100svh;
+  display: flex;
+  padding: 7.5rem 1.2rem 4rem;
+}
+.auth-card { margin: auto; }
+.auth-card {
+  width: min(460px, 100%);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  background: var(--glass);
+  padding: clamp(1.8rem, 4vw, 2.6rem);
+  box-shadow: var(--card-shadow);
+}
+.auth-card h1 { font-size: 2rem; margin: 0.5rem 0 0.4rem; }
+.auth-card .section-lede { margin-bottom: 1.8rem; font-size: 0.92rem; }
+.auth-card .btn { width: 100%; justify-content: center; }
+.auth-foot {
+  margin-top: 1.6rem; padding-top: 1.2rem;
+  border-top: 1px solid var(--hairline);
+  font-size: 0.85rem; font-weight: 300; color: var(--muted);
+}
+.auth-foot a { color: var(--gold-2); }
+.form-err { font-family: var(--mono); font-size: 0.8rem; color: var(--err); margin-top: 1rem; }
+
+/* ---------- Navigation de section, en pastilles ---------- */
+/* Meme vocabulaire que les filtres du catalogue : bordure fine,
+   fond de verre, or sur l'element actif. Defile horizontalement
+   sur telephone plutot que de deborder. */
+.app-tabs {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.6rem;
+  margin-bottom: 2.2rem;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+.app-tab {
+  flex: none;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  background: var(--glass);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--muted);
+  white-space: nowrap;
+  transition: border-color 0.3s, color 0.3s, background-color 0.3s;
+}
+.app-tab:hover { border-color: var(--hairline-gold); color: var(--text); }
+.app-tab.is-active {
+  border-color: var(--gold);
+  background: var(--glass-2);
+  color: var(--gold-2);
+}
+
+/* ---------- Gabarit des pages privees ---------- */
+.app-shell {
+  max-width: 1180px; margin: 0 auto;
+  padding: clamp(7.5rem, 16vh, 9.5rem) clamp(1.2rem, 4vw, 2rem) clamp(3rem, 8vh, 5rem);
+}
+.app-shell.is-wide { max-width: 1440px; }
+.app-shell .section { padding: 0 0 2.5rem; }
+.app-shell .section-head { margin-bottom: 1.8rem; }

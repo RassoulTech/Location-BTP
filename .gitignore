@@ -1,20 +1,17 @@
-# Node modules
 node_modules/
+.next/
+out/
+build/
 
-# npm artifacts
-package-lock.json
-npm-debug.log
-
-# Generated icon scripts
-generate-icons.js
-text-to-paths.js
-
-# Editor / OS
-.vscode/
-.DS_Store
-
-# Environment
+# Secrets : jamais versionnes (CDC §46, §73)
 .env
+.env.local
+.env.*.local
 
-# Vercel
+*.log
+.DS_Store
 .vercel
+/captures/
+
+# Dossier cree par l'application Claude pour les fichiers recus
+Claude outputs/
